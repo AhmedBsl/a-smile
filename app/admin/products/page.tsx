@@ -5,6 +5,7 @@ import { useStore, Product } from '@/lib/store';
 import { AdminPageShell } from '@/components/admin-page-shell';
 import { motion } from 'framer-motion';
 import { Plus, Edit2, Trash2, X, Check } from 'lucide-react';
+import { useRef } from 'react';
 import { COLLECTIONS } from '@/lib/sample-data';
 import { formatDZD } from '@/lib/format';
 
@@ -30,6 +31,7 @@ export default function AdminProductsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState(emptyForm);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const filteredProducts = products.filter(
     (p) =>
@@ -52,6 +54,17 @@ export default function AdminProductsPage() {
     }
     setFormData(emptyForm);
     setShowForm(false);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setFormData({ ...formData, image: reader.result as string });
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleEdit = (product: Product) => {
@@ -167,14 +180,41 @@ export default function AdminProductsPage() {
                 min={0}
                 className="px-4 py-2 border border-border rounded-sm bg-background"
               />
-              <input
-                type="url"
-                placeholder="رابط الصورة"
-                value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                required
-                className="px-4 py-2 border border-border rounded-sm bg-background"
-              />
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-muted-foreground">صورة المنتج</label>
+                {formData.image ? (
+                  <div className="relative group">
+                    <img
+                      src={formData.image}
+                      alt="معاينة"
+                      className="w-full h-32 object-cover border border-border rounded-sm"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, image: '' })}
+                      className="absolute top-1 left-1 p-1 bg-destructive text-white rounded-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full h-32 border-2 border-dashed border-border rounded-sm flex flex-col items-center justify-center gap-2 hover:border-primary/40 transition-colors text-muted-foreground"
+                  >
+                    <Plus className="w-5 h-5" />
+                    <span className="text-xs font-bold">إلغاء تحميل الصورة</span>
+                  </button>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+              </div>
             </div>
             <div className="flex gap-3">
               <button
