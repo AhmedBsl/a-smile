@@ -43,15 +43,6 @@ export default function AdminContentPage() {
         })}
       </div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-        className="mt-8 bg-card border-2 border-dashed border-primary/30 p-12 rounded-sm text-center"
-      >
-        <p className="text-2xl font-black text-foreground mb-2">CMS Editor</p>
-        <p className="text-sm text-muted-foreground">Full content management tools are being developed. Coming soon.</p>
-      </motion.div>
     </AdminPageShell>
   );
 }
