@@ -389,11 +389,11 @@ export default function DeliveryPage() {
               <table className="w-full text-sm">
                 <thead className="bg-muted border-b border-border">
                   <tr>
-                    <th className="text-left px-4 py-3 font-bold">Wilaya</th>
-                    <th className="text-left px-4 py-3 font-bold">Home Delivery</th>
-                    <th className="text-left px-4 py-3 font-bold">Stop Desk</th>
-                    <th className="text-left px-4 py-3 font-bold">Est. Days</th>
-                    <th className="text-left px-4 py-3 font-bold">Communes</th>
+                    <th className="text-right px-4 py-3 font-bold">الولاية</th>
+                    <th className="text-right px-4 py-3 font-bold">توصيل للمنزل</th>
+                    <th className="text-right px-4 py-3 font-bold">مكتب التوصيل</th>
+                    <th className="text-right px-4 py-3 font-bold">المدة</th>
+                    <th className="text-right px-4 py-3 font-bold">الرمز</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -411,11 +411,8 @@ export default function DeliveryPage() {
                       </td>
                       <td className="px-4 py-3 font-mono">{formatDZD(zone.homeDelivery)}</td>
                       <td className="px-4 py-3 font-mono">{formatDZD(zone.stopDesk)}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{zone.days} days</td>
-                      <td className="px-4 py-3 text-muted-foreground text-xs">
-                        {zone.communes.slice(0, 3).join(', ')}
-                        {zone.communes.length > 3 && ` +${zone.communes.length - 3}`}
-                      </td>
+                      <td className="px-4 py-3 text-muted-foreground">{zone.days}</td>
+                      <td className="px-4 py-3 text-muted-foreground font-mono text-xs">{zone.id}</td>
                     </motion.tr>
                   ))}
                 </tbody>
