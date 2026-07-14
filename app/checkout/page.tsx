@@ -22,11 +22,13 @@ export default function CheckoutPage() {
   const createOrder = useStore((state) => state.createOrder);
 
   const [formData, setFormData] = useState({
+    fullName: '',
     phone: '',
     wilaya: '',
     commune: '',
     deliveryType: 'home' as 'home' | 'office',
     promoCode: '',
+    bureaus: [] as string[],
   });
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -44,12 +46,16 @@ export default function CheckoutPage() {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
+    if (!formData.fullName.trim()) newErrors.fullName = 'الاسم الكامل مطلوب';
     if (!formData.phone.trim()) newErrors.phone = 'رقم الهاتف مطلوب';
     else if (!/^(05|06|07)\d{8}$/.test(formData.phone.replace(/\s/g, ''))) {
       newErrors.phone = 'رقم الهاتف غير صحيح';
     }
     if (!formData.wilaya) newErrors.wilaya = 'اختر الولاية';
     if (!formData.commune) newErrors.commune = 'اختر البلدية';
+    if (formData.deliveryType === 'office' && formData.bureaus.length === 0) {
+      newErrors.bureaus = 'اختر مكتب توصيل واحد على الأقل';
+    }
     if (formData.promoCode && !PROMO_CODES[formData.promoCode.toUpperCase()]) {
       newErrors.promoCode = 'رمز الترويجي غير صحيح';
     }
@@ -67,7 +73,7 @@ export default function CheckoutPage() {
       items: cart,
       total,
       status: 'pending' as const,
-      customerName: 'عميل',
+      customerName: formData.fullName || 'عميل',
       customerEmail: '',
       customerPhone: formData.phone,
       address: '',
@@ -75,6 +81,7 @@ export default function CheckoutPage() {
       commune: formData.commune,
       createdAt: new Date().toISOString(),
       shippingCost: shipping,
+      notes: formData.deliveryType === 'office' ? `مكتب التوصيل: ${formData.bureaus.join('، ')}` : '',
       carrierPricing: formData.deliveryType === 'home' ? 'home-delivery' as const : 'stop-desk' as const,
     };
 
@@ -127,13 +134,25 @@ export default function CheckoutPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-6">
-            {/* Phone */}
+            {/* Personal Info */}
             <div className="bg-card border border-border rounded-2xl p-6 space-y-4">
               <h2 className="font-black text-lg flex items-center gap-2">
                 <span className="bg-primary text-white w-7 h-7 rounded-full flex items-center justify-center text-sm">1</span>
-                رقم الهاتف
+                معلومات العميل
               </h2>
               <div>
+                <label className="block text-sm font-bold mb-1.5">الاسم الكامل *</label>
+                <input
+                  type="text"
+                  value={formData.fullName}
+                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                  className={`w-full px-4 py-3 border rounded-xl bg-background text-sm ${errors.fullName ? 'border-destructive' : 'border-border'} focus:outline-none focus:border-primary`}
+                  placeholder="اسمك الكامل"
+                />
+                {errors.fullName && <p className="text-xs text-destructive mt-1">{errors.fullName}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-1.5">رقم الهاتف *</label>
                 <input
                   type="tel"
                   value={formData.phone}
@@ -190,7 +209,7 @@ export default function CheckoutPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
-                    onClick={() => setFormData({ ...formData, deliveryType: 'home' })}
+                    onClick={() => setFormData({ ...formData, deliveryType: 'home', bureaus: [] })}
                     className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all ${
                       formData.deliveryType === 'home'
                         ? 'border-primary bg-primary/5'
@@ -224,6 +243,41 @@ export default function CheckoutPage() {
                   </button>
                 </div>
               </div>
+
+              {/* Bureaus - only when office delivery */}
+              {formData.deliveryType === 'office' && selectedWilaya?.bureaus && (
+                <div>
+                  <label className="block text-sm font-bold mb-2">اختر مكتب التوصيل *</label>
+                  <div className="space-y-2">
+                    {selectedWilaya.bureaus.map((bureau) => (
+                      <label
+                        key={bureau}
+                        className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                          formData.bureaus.includes(bureau)
+                            ? 'border-primary bg-primary/5'
+                            : 'border-border hover:border-primary/30'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={formData.bureaus.includes(bureau)}
+                          onChange={() => {
+                            setFormData({
+                              ...formData,
+                              bureaus: formData.bureaus.includes(bureau)
+                                ? formData.bureaus.filter((b) => b !== bureau)
+                                : [...formData.bureaus, bureau],
+                            });
+                          }}
+                          className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
+                        />
+                        <span className="text-sm font-bold">{bureau}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {errors.bureaus && <p className="text-xs text-destructive mt-1">{errors.bureaus}</p>}
+                </div>
+              )}
             </div>
 
             {/* Promo Code */}

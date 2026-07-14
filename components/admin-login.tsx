@@ -77,11 +77,11 @@ export function AdminLogin() {
         onClick={() => (window.location.href = '/')}
         whileHover={{ scale: 1.05, x: -4 }}
         whileTap={{ scale: 0.95 }}
-        className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 rounded-sm text-sand/70 hover:text-sand hover:bg-white/5 transition-colors"
-        title="Return to homepage"
+        className="absolute top-6 right-6 flex items-center gap-2 px-4 py-2 rounded-sm text-sand/70 hover:text-sand hover:bg-white/5 transition-colors"
+        title="العودة للرئيسية"
       >
         <ArrowLeft className="w-5 h-5" />
-        <span className="font-semibold hidden sm:inline">Back</span>
+        <span className="font-semibold hidden sm:inline">رجوع</span>
       </motion.button>
 
       <motion.div
@@ -101,10 +101,10 @@ export function AdminLogin() {
               <BrandLogo size="lg" showGlow />
             </div>
             <h1 className="text-3xl font-black text-sand mb-2 tracking-tight">
-              Admin Access
+              لوحة التحكم
             </h1>
             <p className="text-sand/50 text-sm font-mono">
-              Enter password to continue
+              أدخل كلمة المرور للمتابعة
             </p>
           </motion.div>
 

@@ -37,58 +37,58 @@ type NavItem = {
 const navSections: { title?: string; items: NavItem[] }[] = [
   {
     items: [
-      { icon: ExternalLink, label: 'View Store', href: '/' },
+      { icon: ExternalLink, label: 'عرض المتجر', href: '/' },
     ],
   },
   {
-    title: 'MAIN',
+    title: 'الرئيسية',
     items: [
-      { icon: LayoutDashboard, label: 'Dashboard', href: '/admin' },
+      { icon: LayoutDashboard, label: 'لوحة التحكم', href: '/admin' },
     ],
   },
   {
-    title: 'COMMERCE',
+    title: 'التجارة',
     items: [
       {
         icon: ShoppingCart,
-        label: 'Orders',
+        label: 'الطلبات',
         children: [
-          { label: 'All Orders', href: '/admin/orders' },
-          { label: 'Prepare Orders', href: '/admin/orders?tab=prepare' },
+          { label: 'جميع الطلبات', href: '/admin/orders' },
+          { label: 'تجهيز الطلبات', href: '/admin/orders?tab=prepare' },
         ],
       },
       {
         icon: Package,
-        label: 'Products',
+        label: 'المنتجات',
         children: [
-          { label: 'All Products', href: '/admin/products' },
-          { label: 'Stock Manager', href: '/admin/inventory' },
+          { label: 'جميع المنتجات', href: '/admin/products' },
+          { label: 'إدارة المخزون', href: '/admin/inventory' },
         ],
       },
-      { icon: Layers, label: 'Categories', href: '/admin/categories' },
-      { icon: Truck, label: 'Delivery', href: '/admin/delivery' },
+      { icon: Layers, label: 'التصنيفات', href: '/admin/categories' },
+      { icon: Truck, label: 'التوصيل', href: '/admin/delivery' },
     ],
   },
   {
-    title: 'GROWTH',
+    title: 'التسويق',
     items: [
       {
         icon: Megaphone,
-        label: 'Marketing',
+        label: 'تسويق',
         children: [
-          { label: 'Promo Codes', href: '/admin/marketing' },
-          { label: 'Reviews', href: '/admin/marketing?tab=reviews' },
+          { label: 'الرموز الترويجية', href: '/admin/marketing' },
+          { label: 'التقييمات', href: '/admin/marketing?tab=reviews' },
         ],
       },
-      { icon: FileText, label: 'Content', href: '/admin/content' },
-      { icon: Users, label: 'Customers', href: '/admin/customers' },
-      { icon: BarChart3, label: 'Statistics', href: '/admin/analytics' },
+      { icon: FileText, label: 'المحتوى', href: '/admin/content' },
+      { icon: Users, label: 'العملاء', href: '/admin/customers' },
+      { icon: BarChart3, label: 'الإحصائيات', href: '/admin/analytics' },
     ],
   },
   {
-    title: 'SYSTEM',
+    title: 'النظام',
     items: [
-      { icon: Settings, label: 'Settings', href: '/admin/settings' },
+      { icon: Settings, label: 'الإعدادات', href: '/admin/settings' },
     ],
   },
 ];
@@ -257,7 +257,7 @@ export function AdminSidebar() {
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-venom animate-pulse" />
                 <span className="text-[9px] font-mono text-venom uppercase tracking-wider">
-                  Store Live
+                  المتجر نشط
                 </span>
               </div>
             </div>
@@ -284,11 +284,11 @@ export function AdminSidebar() {
         <div className="p-3 border-t border-white/10 space-y-2">
           <div className="px-3 py-2 rounded-sm bg-white/5 text-xs text-sand/40 font-mono">
             <div className="flex justify-between">
-              <span>Orders</span>
+              <span>الطلبات</span>
               <span className="text-sand font-bold">{orders.length}</span>
             </div>
             <div className="flex justify-between mt-1">
-              <span>Products</span>
+              <span>المنتجات</span>
               <span className="text-sand font-bold">{products.length}</span>
             </div>
           </div>
@@ -297,7 +297,7 @@ export function AdminSidebar() {
             className="w-full flex items-center gap-3 px-3 py-2 rounded-sm text-xs font-semibold text-sand/40 hover:text-primary hover:bg-primary/5 transition-colors"
           >
             <LogOut className="w-3.5 h-3.5" />
-            Exit Admin
+            تسجيل الخروج
           </button>
         </div>
       </motion.aside>
