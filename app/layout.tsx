@@ -1,52 +1,25 @@
-import { Analytics } from '@vercel/analytics/next'
-import type { Metadata, Viewport } from 'next'
-import './globals.css'
+import type { Metadata } from 'next';
+import { Inter, Cairo } from 'next/font/google';
+import './globals.css';
+
+const inter = Inter({ subsets: ['latin'] });
+const cairo = Cairo({ subsets: ['arabic'], variable: '--font-cairo' });
 
 export const metadata: Metadata = {
-  title: 'A.Smile - Premium Algerian Streetwear',
-  description: 'Street-smart clothing brand celebrating Algerian culture and confidence',
-  generator: 'v0.app',
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
-  },
-}
-
-export const viewport: Viewport = {
-  colorScheme: 'light dark',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#dc143c' },
-    { media: '(prefers-color-scheme: dark)', color: '#ff1a47' },
-  ],
-  width: 'device-width',
-  initialScale: 1,
-  userScalable: true,
-}
+  title: 'Melina Chic - Modest Fashion & Beauty | Algeria',
+  description: 'Modest fashion, hijabs, shoes, cosmetics & accessories for Algerian women. Free delivery across all 58 wilayas. Cash on delivery.',
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className="bg-background">
-      <body className="antialiased">
+    <html lang="ar" dir="rtl">
+      <body className={`${inter.className} ${cairo.variable} antialiased`}>
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
-  )
+  );
 }

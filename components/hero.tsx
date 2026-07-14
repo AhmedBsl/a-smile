@@ -1,172 +1,113 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, ChevronDown } from 'lucide-react';
-import { HeroShowcase } from './hero-showcase';
-import { BrandLogo } from './brand-logo';
-import { useRef } from 'react';
+import { Truck, ShieldCheck, Sparkles } from 'lucide-react';
 
 export function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end start'],
-  });
-
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const textY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.12, delayChildren: 0.1 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30, filter: 'blur(8px)' },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0px)',
-      transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] },
-    },
-  };
-
   return (
-    <section ref={sectionRef} className="relative bg-background overflow-hidden min-h-[100vh] flex flex-col">
-      {/* Animated Background Elements */}
-      <motion.div style={{ y: bgY }} className="absolute inset-0 -z-10">
-        <div className="absolute top-32 right-1/4 w-[500px] h-[500px] bg-primary/6 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 left-0 w-[400px] h-[400px] bg-venom/4 rounded-full blur-[100px]" />
-        <div className="absolute top-1/2 left-1/3 w-[300px] h-[300px] bg-clay/5 rounded-full blur-[80px]" />
-      </motion.div>
-
-      {/* Watermark */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none hidden lg:block">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.5, delay: 0.5 }}
-        >
-          <BrandLogo size="lg" className="scale-[5]" />
-        </motion.div>
+    <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-gradient-to-bl from-pink-50 via-white to-rose-50">
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-20 w-72 h-72 bg-pink-200/30 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-rose-100/40 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-100/20 rounded-full blur-3xl" />
       </div>
 
-      {/* Main Hero Content */}
-      <motion.div style={{ y: textY, opacity }} className="container mx-auto px-4 flex-1 flex items-center py-20 md:py-32">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="max-w-4xl relative z-10"
-        >
-          {/* Eyebrow */}
-          <motion.div variants={itemVariants} className="mb-8">
-            <motion.span
-              className="inline-flex items-center gap-2 text-[10px] font-mono tracking-[0.3em] text-primary uppercase border border-primary/20 px-4 py-2 rounded-sm bg-primary/5 backdrop-blur-sm"
-              whileHover={{ borderColor: 'rgba(193, 39, 45, 0.4)' }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-venom animate-pulse" />
-              Adel × Abdelillah — Sidi Bel Abbès
-            </motion.span>
-          </motion.div>
-
-          {/* Headline */}
-          <motion.h1
-            variants={itemVariants}
-            className="text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] font-black text-foreground leading-[0.9] tracking-tight mb-8"
-          >
-            <span className="block">MADE IN</span>
-            <motion.span
-              className="block text-primary relative"
-              initial={{ backgroundPosition: '0% 50%' }}
-              animate={{ backgroundPosition: '100% 50%' }}
-              transition={{ duration: 3, repeat: Infinity, repeatType: 'reverse' }}
-              style={{
-                backgroundImage: 'linear-gradient(90deg, #C1272D, #8F1E23, #C1272D)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              SIDI BEL ABBÈS
-            </motion.span>
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            variants={itemVariants}
-            className="text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed mb-12"
-          >
-            Streetwear with edge and warmth. The Scorpion Collection, USMBA heritage,
-            and the smile in every stitch — clothing people are happy to wear.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 mb-16">
-            <Link
-              href="/shop"
-              className="group inline-flex items-center justify-center gap-2 bg-primary text-white px-8 py-4 font-black text-sm uppercase tracking-wider hover:bg-redDim transition-all duration-300 rounded-sm"
-            >
-              Shop Now
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
-              href="#featured"
-              className="inline-flex items-center justify-center gap-2 border-2 border-foreground/20 text-foreground px-8 py-4 font-bold text-sm uppercase tracking-wider hover:bg-foreground hover:text-background transition-all duration-300 rounded-sm"
-            >
-              Discover More
-            </Link>
-          </motion.div>
-
-          {/* Stats */}
+      <div className="container mx-auto px-4 py-16 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Text Content */}
           <motion.div
-            variants={itemVariants}
-            className="grid grid-cols-3 gap-6 max-w-md"
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center lg:text-right"
           >
-            {[
-              { val: '58', label: 'Wilayas shipped' },
-              { val: 'COD', label: 'Cash on delivery' },
-              { val: '100%', label: 'Local brand' },
-            ].map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 + i * 0.1 }}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 bg-pink-100 text-pink-700 px-4 py-1.5 rounded-full text-sm font-bold mb-6"
+            >
+              <Sparkles className="w-4 h-4" />
+              новая kolekcja 2026
+            </motion.div>
+
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-foreground leading-tight mb-6">
+              <span className="block">أناقتك</span>
+              <span className="block text-primary">تبدأ من هنا</span>
+            </h1>
+
+            <p className="text-lg text-muted-foreground mb-8 max-w-lg mx-auto lg:mr-0 lg:ml-auto">
+              أحجية أنيقة، ماكياج احترافي، وإطلالة جذابة — كل ما تحتاجينه لتكوني الأفضل
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <Link
+                href="/shop"
+                className="bg-primary text-white px-8 py-4 rounded-full font-black text-lg hover:bg-redDim transition-all shadow-lg shadow-pink-200 hover:shadow-xl hover:shadow-pink-300 text-center"
               >
-                <div className="text-2xl md:text-3xl font-black text-primary font-mono">
-                  {stat.val}
-                </div>
-                <p className="text-[10px] md:text-xs text-muted-foreground mt-1 uppercase tracking-wide">{stat.label}</p>
-              </motion.div>
-            ))}
+                تسوقي الآن
+              </Link>
+              <Link
+                href="/shop?category=hijabs"
+                className="border-2 border-primary text-primary px-8 py-4 rounded-full font-black text-lg hover:bg-primary hover:text-white transition-all text-center"
+              >
+                اكتشفي الحجابات
+              </Link>
+            </div>
+
+            {/* Stats */}
+            <div className="flex items-center gap-8 mt-12 justify-center lg:justify-start">
+              {[
+                { icon: Truck, label: 'توصيل لـ 58 ولاية' },
+                { icon: ShieldCheck, label: 'الدفع عند الاستلام' },
+                { icon: Sparkles, label: 'منتجات أصلية' },
+              ].map((stat, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 + i * 0.1 }}
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                >
+                  <stat.icon className="w-4 h-4 text-primary" />
+                  <span className="hidden sm:inline">{stat.label}</span>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
-        </motion.div>
-      </motion.div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="flex flex-col items-center gap-2"
-        >
-          <span className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.2em]">Scroll</span>
-          <ChevronDown className="w-4 h-4 text-muted-foreground" />
-        </motion.div>
-      </motion.div>
-
-      <HeroShowcase />
+          {/* Hero Image */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="relative"
+          >
+            <div className="relative w-full aspect-square max-w-lg mx-auto">
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-200 to-rose-200 rounded-3xl rotate-6 opacity-60" />
+              <div className="absolute inset-0 bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&h=800&fit=crop"
+                  alt="Modest fashion"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              {/* Floating badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1, type: 'spring' }}
+                className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-xl p-4 border border-border"
+              >
+                <p className="text-2xl font-black text-primary">-29%</p>
+                <p className="text-xs text-muted-foreground font-bold">خصم خاص</p>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
 }

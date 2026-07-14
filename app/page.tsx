@@ -1,249 +1,329 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { Header } from '@/components/header';
 import { Hero } from '@/components/hero';
-import { AnimatedBackground } from '@/components/animated-background';
+import { HeroShowcase } from '@/components/hero-showcase';
 import { useStore } from '@/lib/store';
-import { SAMPLE_PRODUCTS } from '@/lib/sample-data';
-import Link from 'next/link';
-import { motion, useInView } from 'framer-motion';
+import { SAMPLE_PRODUCTS, COLLECTIONS } from '@/lib/sample-data';
 import { formatDZD } from '@/lib/format';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
+import { Star, ShoppingBag, Heart, ArrowLeft, Users, Send } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
 
 function FeaturedSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const products = useStore((state) => state.products);
-
   return (
-    <section id="featured" ref={ref} className="py-20 bg-background relative">
+    <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="mb-16 text-center"
-        >
-          <span className="inline-block text-[10px] font-mono tracking-[0.3em] text-primary uppercase mb-4">
-            New Arrivals
-          </span>
-          <h2 className="text-4xl md:text-5xl font-black text-foreground mb-4">
-            Featured Collection
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Hand-picked pieces that define street style. Every item tells a story of confidence and culture.
-          </p>
-        </motion.div>
+        <div className="text-center mb-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-4xl font-black text-foreground mb-3"
+          >
+            المنتجات المميزة
+          </motion.h2>
+          <p className="text-muted-foreground">اختياراتنا لكِ — أجدد المنتجات وأكثرها رواجاً</p>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.slice(0, 6).map((product, index) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {SAMPLE_PRODUCTS.map((product, index) => (
             <motion.div
               key={product.id}
-              initial={{ opacity: 0, y: 40 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.05 }}
             >
-              <Link href={`/product/${product.id}`}>
-                <div className="group cursor-pointer h-full">
-                  <div className="relative overflow-hidden rounded-sm bg-muted aspect-[3/4] mb-4">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      <span className="text-white text-xs font-bold uppercase tracking-wider">View Details →</span>
+              <Link
+                href={`/product/${product.id}`}
+                className="group block bg-card rounded-2xl border border-border overflow-hidden hover:shadow-xl hover:shadow-pink-100/50 transition-all"
+              >
+                <div className="relative aspect-square overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  {product.oldPrice && product.oldPrice > product.price && (
+                    <div className="absolute top-3 right-3 bg-primary text-white text-xs font-black px-2.5 py-1 rounded-full">
+                      -{Math.round((1 - product.price / product.oldPrice) * 100)}%
                     </div>
-                  </div>
-                  <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors mb-2">
+                  )}
+                  <button className="absolute top-3 left-3 p-2 bg-white/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white">
+                    <Heart className="w-4 h-4 text-primary" />
+                  </button>
+                </div>
+
+                <div className="p-4">
+                  {/* Rating */}
+                  {product.rating && (
+                    <div className="flex items-center gap-1 mb-2">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-3.5 h-3.5 ${i < Math.floor(product.rating!) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                        />
+                      ))}
+                      <span className="text-xs text-muted-foreground mr-1">{product.rating}</span>
+                    </div>
+                  )}
+
+                  <h3 className="font-bold text-foreground text-sm mb-2 line-clamp-2 min-h-[2.5rem]">
                     {product.name}
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                    {product.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xl font-black text-primary font-mono">
-                      {formatDZD(product.price)}
-                    </span>
-                    <span className="text-[10px] font-bold text-accent bg-accent/10 px-3 py-1 rounded-sm uppercase tracking-wider">
-                      {product.stock > 0 ? 'In Stock' : 'Sold Out'}
-                    </span>
+
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="font-black text-primary text-lg font-mono">{formatDZD(product.price)}</span>
+                    {product.oldPrice && product.oldPrice > product.price && (
+                      <span className="text-sm text-muted-foreground line-through font-mono">{formatDZD(product.oldPrice)}</span>
+                    )}
                   </div>
+
+                  <button className="w-full bg-primary text-white py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-redDim transition-colors">
+                    <ShoppingBag className="w-4 h-4" />
+                    أطلب الآن
+                  </button>
                 </div>
               </Link>
             </motion.div>
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-12 text-center"
-        >
-          <Link href="/shop">
-            <button className="bg-primary text-primary-foreground px-8 py-3.5 font-black text-sm uppercase tracking-wider hover:bg-redDim transition-all duration-300 rounded-sm group inline-flex items-center gap-2">
-              View Full Shop
-              <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </button>
+        <div className="text-center mt-10">
+          <Link
+            href="/shop"
+            className="inline-flex items-center gap-2 border-2 border-primary text-primary px-8 py-3 rounded-full font-bold hover:bg-primary hover:text-white transition-all"
+          >
+            عرض جميع المنتجات
+            <ArrowLeft className="w-4 h-4" />
           </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CollabsSection() {
+  const [formData, setFormData] = useState({
+    name: '',
+    handle: '',
+    link: '',
+    followers: '',
+    message: '',
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 3000);
+    setFormData({ name: '', handle: '', link: '', followers: '', message: '' });
+  };
+
+  const ambassadors = [
+    { name: 'سارة م.', handle: '@sara_style_dz', followers: '45K', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop' },
+    { name: 'ليلى ب.', handle: '@layla_beauty', followers: '32K', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop' },
+    { name: 'نورا ك.', handle: '@nora_chic', followers: '28K', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&h=200&fit=crop' },
+    { name: 'مريم ع.', handle: '@mريم_modest', followers: '51K', image: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=200&h=200&fit=crop' },
+  ];
+
+  return (
+    <section className="py-16 bg-gradient-to-br from-pink-50 to-rose-50">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="inline-flex items-center gap-2 bg-white text-primary px-4 py-1.5 rounded-full text-sm font-bold mb-4 shadow-sm">
+              <Users className="w-4 h-4" />
+              فريق سفيرة الماركات
+            </div>
+            <h2 className="text-3xl md:text-4xl font-black text-foreground mb-3">
+              التعاون والشراكات
+            </h2>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              انضمي إلى فريق سفيراتنا واحصلي على خصومات حصرية ومنتجات مجانية
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Ambassador Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+          {ambassadors.map((amb, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="bg-white rounded-2xl p-4 text-center border border-pink-100 hover:shadow-lg transition-all"
+            >
+              <img
+                src={amb.image}
+                alt={amb.name}
+                className="w-16 h-16 rounded-full mx-auto mb-3 object-cover border-2 border-pink-200"
+              />
+              <p className="font-bold text-foreground text-sm">{amb.name}</p>
+              <p className="text-xs text-primary font-bold">{amb.handle}</p>
+              <p className="text-xs text-muted-foreground mt-1">{amb.followers} متابع</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Apply Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-xl mx-auto bg-white rounded-2xl p-8 shadow-lg border border-pink-100"
+        >
+          <h3 className="font-black text-lg text-foreground mb-6 text-center">قدمي الآن للتعاون</h3>
+          
+          {submitted ? (
+            <div className="text-center py-8">
+              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Send className="w-8 h-8 text-primary" />
+              </div>
+              <p className="font-bold text-foreground">تم إرسال طلبك بنجاح!</p>
+              <p className="text-sm text-muted-foreground mt-1">سنتواصل معك قريباً</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold mb-1.5">الاسم الكامل</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm focus:outline-none focus:border-primary"
+                    placeholder="اسمك الكامل"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold mb-1.5">الحساب</label>
+                  <input
+                    type="text"
+                    value={formData.handle}
+                    onChange={(e) => setFormData({ ...formData, handle: e.target.value })}
+                    className="w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm focus:outline-none focus:border-primary"
+                    placeholder="@username"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold mb-1.5">رابط الحساب</label>
+                  <input
+                    type="url"
+                    value={formData.link}
+                    onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+                    className="w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm focus:outline-none focus:border-primary"
+                    placeholder="https://instagram.com/..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold mb-1.5">عدد المتابعين</label>
+                  <input
+                    type="text"
+                    value={formData.followers}
+                    onChange={(e) => setFormData({ ...formData, followers: e.target.value })}
+                    className="w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm focus:outline-none focus:border-primary"
+                    placeholder="مثال: 10K"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-1.5">رسالة للتعاون</label>
+                <textarea
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  rows={3}
+                  className="w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm focus:outline-none focus:border-primary resize-none"
+                  placeholder="أخبرينا عن نفسك وعن كيفية تعاونك معنا..."
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-redDim transition-colors"
+              >
+                إرسال الطلب
+              </button>
+            </form>
+          )}
         </motion.div>
       </div>
     </section>
   );
 }
 
-function BrandStorySection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
+function Footer() {
   return (
-    <section ref={ref} className="py-20 bg-charcoal text-sand relative overflow-hidden">
-      {/* Watermark */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-[0.02] pointer-events-none">
-        <svg width="400" height="400" viewBox="0 0 100 100" fill="none">
-          <path d="M50 12 C 20 40, 20 70, 42 88 C 30 70, 34 50, 50 38 C 66 50, 70 70, 58 88 C 80 70, 80 40, 50 12 Z" fill="#C1272D" />
-        </svg>
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8 }}
-          >
-            <span className="inline-block text-[10px] font-mono tracking-[0.3em] text-primary uppercase mb-4">
-              Our Story
-            </span>
-            <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight">
-              TWO FRIENDS,<br />
-              <span className="text-primary">ONE DREAM</span>
-            </h2>
-            <div className="space-y-4 text-sand/70 leading-relaxed">
-              <p>
-                Adel and Abdelillah grew up in Sidi Bel Abbès, where the desert plains meet the roar of the stadium.
-                They wanted to create something that felt like home — streetwear that carries the pride of the
-                scorpion, the passion of USMBA, and the warmth of a smile.
-              </p>
-              <p>
-                A.Smile is not just a brand. It&apos;s a statement that Algerian fashion can stand anywhere in the world.
-                Every piece is designed with intention, built with quality, and priced for our community.
-              </p>
-            </div>
-            <div className="mt-8 grid grid-cols-3 gap-6">
-              {[
-                { val: '2', label: 'Founders' },
-                { val: '8+', label: 'Products' },
-                { val: '58', label: 'Wilayas' },
-              ].map((stat) => (
-                <div key={stat.label}>
-                  <div className="text-2xl font-black text-primary font-mono">{stat.val}</div>
-                  <p className="text-xs text-sand/50 mt-1">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
-          >
-            <div className="aspect-square bg-charcoal2 rounded-sm border border-white/10 flex items-center justify-center relative overflow-hidden">
-              <div className="absolute inset-0 opacity-5">
-                <div
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 6 C 12 24, 12 42, 25 53 C 18 42, 20 30, 30 23 C 40 30, 42 42, 35 53 C 48 42, 48 24, 30 6 Z' fill='%23C1272D'/%3E%3C/svg%3E")`,
-                    backgroundSize: '60px 60px',
-                  }}
-                  className="absolute inset-0"
-                />
-              </div>
-              <div className="text-center relative z-10">
-                <div className="text-8xl font-black text-primary/20 mb-4">A</div>
-                <p className="text-sm font-mono text-sand/30 tracking-[0.3em]">SIDI BEL ABBÈS</p>
-                <p className="text-[10px] font-mono text-sand/20 mt-1">EST. 2024</p>
-              </div>
-            </div>
-          </motion.div>
+    <footer className="bg-charcoal text-sand py-12">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <h3 className="font-black text-lg mb-4 text-white">MELINA CHIC</h3>
+            <p className="text-sm text-sand/60 leading-relaxed">
+              متجر الأناقة العصرية للمرأة الجزائرية — أحجية، ماكياج، وإطلالة مميزة
+            </p>
+          </div>
+          <div>
+            <h4 className="font-bold text-sm mb-4 text-white">المتجر</h4>
+            <ul className="space-y-2 text-sm text-sand/60">
+              <li><Link href="/shop" className="hover:text-primary transition-colors">جميع المنتجات</Link></li>
+              <li><Link href="/shop?category=hijabs" className="hover:text-primary transition-colors">حجابات</Link></li>
+              <li><Link href="/shop?category=shoes" className="hover:text-primary transition-colors">أحذية</Link></li>
+              <li><Link href="/shop?category=makeup" className="hover:text-primary transition-colors">ماكياج</Link></li>
+              <li><Link href="/shop?category=sunglasses" className="hover:text-primary transition-colors">نظارات شمسية</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-sm mb-4 text-white">المساعدة</h4>
+            <ul className="space-y-2 text-sm text-sand/60">
+              <li><Link href="/track" className="hover:text-primary transition-colors">تتبع الطلب</Link></li>
+              <li><Link href="/cart" className="hover:text-primary transition-colors">سلة المشتريات</Link></li>
+              <li><span className="hover:text-primary transition-colors cursor-pointer">الأسئلة الشائعة</span></li>
+              <li><span className="hover:text-primary transition-colors cursor-pointer">سياسة الإرجاع</span></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-sm mb-4 text-white">تواصل معنا</h4>
+            <ul className="space-y-2 text-sm text-sand/60">
+              <li>البريد: collabs@melinachic.com</li>
+              <li>الدعم: support@melinachic.com</li>
+              <li className="pt-2">
+                <span className="text-xs text-sand/40">توصيل لجميع الولايات الـ 58</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-sand/40">
+            © 2026 Melina Chic. جميع الحقوق محفوظة.
+          </p>
+          <p className="text-xs text-sand/40">صنع بـ ❤ في الجزائر</p>
         </div>
       </div>
-    </section>
+    </footer>
   );
 }
 
-export default function Home() {
-  const router = useRouter();
-  const products = useStore((state) => state.products);
-  const addProduct = useStore((state) => state.addProduct);
-
-  useEffect(() => {
-    if (products.length === 0) {
-      SAMPLE_PRODUCTS.forEach((product) => {
-        addProduct(product);
-      });
-    }
-  }, [products.length, addProduct]);
-
+export default function HomePage() {
   return (
-    <main className="bg-background min-h-screen relative">
-      <AnimatedBackground />
+    <main className="bg-background min-h-screen">
       <Header />
       <Hero />
+      <HeroShowcase />
       <FeaturedSection />
-      <BrandStorySection />
-
-      {/* Footer */}
-      <footer className="bg-charcoal text-sand py-12 border-t border-white/10 relative">
-        <button
-          onClick={() => router.push('/admin')}
-          aria-label="Admin"
-          className="absolute bottom-4 left-4 w-3 h-3 rounded-full bg-white/5 hover:bg-white/10 transition-colors opacity-20 hover:opacity-40"
-        />
-
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="font-black text-lg mb-4">A.SMILE</h3>
-              <p className="text-sm text-sand/60 leading-relaxed">
-                Premium Algerian streetwear celebrating culture and confidence. Designed in Sidi Bel Abbès.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4 text-xs uppercase tracking-wider text-sand/40">Shop</h4>
-              <ul className="space-y-2 text-sm text-sand/60">
-                <li><Link href="/shop" className="hover:text-primary transition-colors">All Products</Link></li>
-                <li><Link href="/shop?category=Scorpion" className="hover:text-primary transition-colors">Scorpion Collection</Link></li>
-                <li><Link href="/shop?category=USMBA" className="hover:text-primary transition-colors">USMBA Heritage</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4 text-xs uppercase tracking-wider text-sand/40">Support</h4>
-              <ul className="space-y-2 text-sm text-sand/60">
-                <li><Link href="/cart" className="hover:text-primary transition-colors">Cart</Link></li>
-                <li><Link href="/checkout" className="hover:text-primary transition-colors">Checkout</Link></li>
-                <li><span className="text-sand/30">Contact Coming Soon</span></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4 text-xs uppercase tracking-wider text-sand/40">Legal</h4>
-              <ul className="space-y-2 text-sm text-sand/60">
-                <li><span className="text-sand/30">Privacy Policy</span></li>
-                <li><span className="text-sand/30">Terms of Service</span></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-sand/40">&copy; 2026 A.SMILE. All rights reserved.</p>
-            <p className="text-[10px] font-mono text-sand/20 tracking-wider">DESIGNED IN ALGÉRIA</p>
-          </div>
-        </div>
-      </footer>
+      <CollabsSection />
+      <Footer />
     </main>
   );
 }

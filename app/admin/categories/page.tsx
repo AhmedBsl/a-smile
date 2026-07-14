@@ -9,10 +9,11 @@ import { Layers } from 'lucide-react';
 export default function CategoriesPage() {
   const products = useStore((s) => s.products);
 
-  const categories = COLLECTIONS.map((name) => ({
-    name,
-    slug: name.toLowerCase().replace(/\s+/g, '-'),
-    count: products.filter((p) => p.category === name).length,
+  const categories = COLLECTIONS.map((col) => ({
+    name: col.name,
+    icon: col.icon,
+    slug: col.id,
+    count: products.filter((p) => p.category === col.id).length,
   }));
 
   return (
@@ -29,8 +30,8 @@ export default function CategoriesPage() {
             transition={{ delay: index * 0.06 }}
             className="bg-card border border-border rounded-sm p-5 flex items-start gap-4"
           >
-            <div className="p-3 rounded-sm bg-primary/10 text-primary shrink-0">
-              <Layers className="w-5 h-5" />
+            <div className="p-3 rounded-sm bg-primary/10 text-primary shrink-0 text-2xl">
+              {cat.icon}
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-black text-foreground">{cat.name}</h3>
@@ -45,7 +46,7 @@ export default function CategoriesPage() {
         ))}
       </div>
       <p className="text-sm text-muted-foreground mt-8 p-4 bg-muted/50 rounded-sm border border-border">
-        Collections are seeded with the A.Smile brand lineup. Assign products to a collection
+        Collections are seeded with the Melina Chic brand lineup. Assign products to a collection
         when editing them in Products.
       </p>
     </AdminPageShell>

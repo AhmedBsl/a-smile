@@ -2,18 +2,21 @@
 
 import Link from 'next/link';
 import { useState, useRef } from 'react';
-import { ShoppingBag, Menu, X, ArrowUpRight, Home } from 'lucide-react';
+import { ShoppingBag, Menu, X, Home, Search, Package } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { ModernLogo } from './modern-logo';
+import { formatDZD } from '@/lib/format';
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [logoClicks, setLogoClicks] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
   const logoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
   const cart = useStore((state) => state.cart);
+  const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleLogoClick = () => {
@@ -34,12 +37,21 @@ export function Header() {
   };
 
   const navItems = [
-    { name: 'Home', href: '/', icon: Home },
-    { name: 'Shop', href: '/shop', icon: ShoppingBag },
+    { name: 'الرئيسية', href: '/', icon: Home },
+    { name: 'المتجر', href: '/shop', icon: ShoppingBag },
+    { name: 'تتبع الطلب', href: '/track', icon: Package },
   ];
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/shop?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/40">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border/40 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-18">
           {/* Logo */}
@@ -51,23 +63,24 @@ export function Header() {
             className="flex items-center gap-3 group"
           >
             <ModernLogo size="md" />
-            <div className="hidden sm:block">
-              <motion.div
-                className="font-black text-lg leading-none text-foreground"
-                animate={{ y: [0, -2, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                A.SMILE
-              </motion.div>
-              <motion.div
-                className="text-xs text-muted-foreground font-semibold"
-                animate={{ opacity: [0.6, 1, 0.6] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                CULTURE & STYLE
-              </motion.div>
-            </div>
           </button>
+
+          {/* Search Bar - Desktop */}
+          <form
+            onSubmit={handleSearch}
+            className="hidden md:flex flex-1 max-w-md mx-8"
+          >
+            <div className="relative w-full">
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="ابحث عن منتج..."
+                className="w-full pr-10 pl-4 py-2.5 border border-border rounded-full bg-muted/50 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all"
+              />
+            </div>
+          </form>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
@@ -80,7 +93,7 @@ export function Header() {
                 <item.icon className="w-4 h-4 opacity-60 group-hover:opacity-100 transition-opacity" />
                 <span>{item.name}</span>
                 <motion.div
-                  className="absolute bottom-0 left-0 h-0.5 bg-primary"
+                  className="absolute bottom-0 right-0 h-0.5 bg-primary"
                   initial={{ width: 0 }}
                   whileHover={{ width: '100%' }}
                   transition={{ duration: 0.3 }}
@@ -103,12 +116,17 @@ export function Header() {
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-black w-5 h-5 rounded-full flex items-center justify-center shadow-lg"
+                    className="absolute -top-1 -left-1 bg-primary text-primary-foreground text-xs font-black w-5 h-5 rounded-full flex items-center justify-center shadow-lg"
                   >
                     {cartCount > 99 ? '99+' : cartCount}
                   </motion.div>
                 )}
               </motion.div>
+              {cartTotal > 0 && (
+                <span className="hidden md:block absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] font-bold text-primary whitespace-nowrap">
+                  {formatDZD(cartTotal)}
+                </span>
+              )}
             </Link>
 
             {/* Mobile Menu Button */}
@@ -157,12 +175,25 @@ export function Header() {
             className="lg:hidden border-t border-border/40 overflow-hidden"
           >
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
+              {/* Mobile Search */}
+              <form onSubmit={handleSearch} className="mb-2">
+                <div className="relative">
+                  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="ابحث عن منتج..."
+                    className="w-full pr-10 pl-4 py-2.5 border border-border rounded-full bg-muted/50 text-sm focus:outline-none focus:border-primary"
+                  />
+                </div>
+              </form>
               {navItems.map((item) => (
                 <motion.div
                   key={item.href}
-                  initial={{ x: -20, opacity: 0 }}
+                  initial={{ x: 20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: -20, opacity: 0 }}
+                  exit={{ x: 20, opacity: 0 }}
                   transition={{ duration: 0.2 }}
                 >
                   <Link
@@ -172,7 +203,6 @@ export function Header() {
                   >
                     <item.icon className="w-5 h-5 text-primary" />
                     <span>{item.name}</span>
-                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity ml-auto" />
                   </Link>
                 </motion.div>
               ))}

@@ -253,7 +253,7 @@ export function AdminSidebar() {
           <Link href="/admin" className="flex items-center gap-3 group" onClick={() => setIsOpen(false)}>
             <BrandLogo size="sm" />
             <div>
-              <p className="font-black text-sm text-sand tracking-tight">A.SMILE</p>
+              <p className="font-black text-sm text-sand tracking-tight">MELINA CHIC</p>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-venom animate-pulse" />
                 <span className="text-[9px] font-mono text-venom uppercase tracking-wider">

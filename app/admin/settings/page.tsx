@@ -99,7 +99,7 @@ export default function AdminSettingsPage() {
               </label>
               <input
                 type="text"
-                defaultValue="A.SMILE"
+                defaultValue="MELINA CHIC"
                 readOnly
                 className="w-full px-4 py-2 border border-border rounded-sm bg-muted/50"
               />

@@ -1,105 +1,56 @@
 'use client';
 
-import { useStore } from '@/lib/store';
 import { motion } from 'framer-motion';
-import { formatDZD } from '@/lib/format';
+import { COLLECTIONS } from '@/lib/sample-data';
 import Link from 'next/link';
 
-const highlights = [
-  'MADE IN SIDI BEL ABBÈS',
-  'SCORPION COLLECTION',
-  'USMBA HERITAGE',
-  'ALGÉRIE STREETWEAR',
-  'PREMIUM QUALITY',
-  'CASH ON DELIVERY',
-  '58 WILAYAS',
-  'FREE RETURNS',
-];
-
 export function HeroShowcase() {
-  const products = useStore((s) => s.products);
-  const showcaseProducts = products.slice(0, 6);
-
   return (
-    <div className="relative w-full overflow-hidden border-y border-border/50 bg-charcoal/5">
-      {/* Marquee strip */}
-      <div className="flex overflow-hidden py-4">
+    <section className="py-12 bg-white border-y border-border/40">
+      {/* Marquee Strip */}
+      <div className="overflow-hidden mb-10">
         <motion.div
-          className="flex gap-8 whitespace-nowrap"
           animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 35, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          className="flex gap-12 whitespace-nowrap"
         >
-          {[...highlights, ...highlights].map((text, i) => (
-            <span
-              key={i}
-              className="text-[10px] font-mono tracking-[0.3em] text-primary/70 uppercase flex items-center gap-8"
-            >
-              {text}
-              <span className="text-venom/60 text-[8px]">&#9670;</span>
-            </span>
+          {[...COLLECTIONS, ...COLLECTIONS, ...COLLECTIONS, ...COLLECTIONS].map((col, i) => (
+            <div key={i} className="flex items-center gap-3 text-lg font-black text-muted-foreground/30">
+              <span>{col.icon}</span>
+              <span>{col.name}</span>
+              <span className="text-primary">✦</span>
+            </div>
           ))}
         </motion.div>
       </div>
 
-      {/* Floating product carousel */}
-      {showcaseProducts.length > 0 && (
-        <div className="relative py-6">
-          <motion.div
-            className="flex gap-4 md:gap-6 px-4"
-            animate={{ x: ['0%', '-50%'] }}
-            transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
-          >
-            {[...showcaseProducts, ...showcaseProducts].map((product, i) => (
+      {/* Category Cards */}
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {COLLECTIONS.map((collection, index) => (
+            <motion.div
+              key={collection.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
               <Link
-                key={`${product.id}-${i}`}
-                href={`/product/${product.id}`}
-                className="shrink-0 w-32 md:w-44 group"
+                href={`/shop?category=${collection.id}`}
+                className="group block p-6 bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl border border-pink-100 hover:border-primary/30 hover:shadow-lg hover:shadow-pink-100 transition-all text-center"
               >
-                <motion.div
-                  className="relative aspect-[3/4] rounded-sm overflow-hidden bg-muted border border-border/50"
-                  whileHover={{ y: -8, scale: 1.03 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className="text-sand/80 text-[10px] font-bold truncate">{product.name}</p>
-                    <p className="text-primary text-xs font-black font-mono">{formatDZD(product.price)}</p>
-                  </div>
-                </motion.div>
+                <span className="text-4xl block mb-3 group-hover:scale-110 transition-transform">
+                  {collection.icon}
+                </span>
+                <h3 className="font-black text-foreground text-sm mb-2">{collection.name}</h3>
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-primary group-hover:gap-2 transition-all">
+                  الإطلاع
+                  <span className="text-lg">⬅</span>
+                </span>
               </Link>
-            ))}
-          </motion.div>
+            </motion.div>
+          ))}
         </div>
-      )}
-
-      {/* Animated coordinates strip */}
-      <motion.div
-        className="py-4 flex justify-center gap-6 text-[9px] font-mono text-muted-foreground/60 tracking-[0.3em]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-      >
-        <motion.span
-          animate={{ opacity: [0.3, 0.8, 0.3] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        >
-          35°11&apos;N
-        </motion.span>
-        <span className="text-primary/40">|</span>
-        <motion.span
-          animate={{ opacity: [0.3, 0.8, 0.3] }}
-          transition={{ duration: 3, repeat: Infinity, delay: 1 }}
-        >
-          0°38&apos;W
-        </motion.span>
-        <span className="text-primary/40">|</span>
-        <span>SIDI BEL ABBÈS</span>
-      </motion.div>
-    </div>
+      </div>
+    </section>
   );
 }

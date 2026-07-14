@@ -1,52 +1,53 @@
 'use client';
 
-import { motion } from 'framer-motion';
+export function BrandLogo({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
+  const sizes = {
+    sm: { w: 28, h: 28, text: 'text-xs' },
+    md: { w: 36, h: 36, text: 'text-sm' },
+    lg: { w: 48, h: 48, text: 'text-lg' },
+  };
 
-interface BrandLogoProps {
-  size?: 'sm' | 'md' | 'lg';
-  showGlow?: boolean;
-  className?: string;
-}
-
-const sizes = {
-  sm: 32,
-  md: 48,
-  lg: 72,
-};
-
-export function BrandLogo({
-  size = 'md',
-  showGlow = false,
-  className = '',
-}: BrandLogoProps) {
-  const dim = sizes[size];
+  const s = sizes[size];
 
   return (
-    <div className={`relative inline-flex ${className}`}>
-      {showGlow && (
-        <motion.div
-          className="absolute inset-0 rounded-sm bg-primary/30 blur-xl"
-          animate={{ opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        />
-      )}
+    <div className="flex items-center gap-2" aria-label="Melina Chic logo">
       <svg
-        width={dim}
-        height={dim}
-        viewBox="0 0 100 100"
+        width={s.w}
+        height={s.h}
+        viewBox="0 0 48 48"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="relative z-10"
-        aria-label="A.Smile logo"
       >
-        <rect width="100" height="100" rx="2" fill="#1B1B1B" />
+        {/* Hanger shape */}
         <path
-          d="M50 12 C 20 40, 20 70, 42 88 C 30 70, 34 50, 50 38
-             C 66 50, 70 70, 58 88 C 80 70, 80 40, 50 12 Z"
-          fill="#C1272D"
+          d="M24 4L24 12"
+          stroke="#E91E63"
+          strokeWidth="2.5"
+          strokeLinecap="round"
         />
-        <circle cx="50" cy="90" r="4" fill="#C9E100" />
+        <path
+          d="M12 24L24 12L36 24"
+          stroke="#E91E63"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M8 24C8 24 14 30 24 30C34 30 40 24 40 24"
+          stroke="#E91E63"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+        <circle cx="24" cy="6" r="2" fill="#E91E63" />
       </svg>
+      <div className="flex flex-col leading-none">
+        <span className={`font-black ${s.text} tracking-tight text-foreground`}>
+          MELINA
+        </span>
+        <span className="text-[8px] font-bold tracking-[0.2em] text-primary uppercase">
+          CHIC
+        </span>
+      </div>
     </div>
   );
 }
