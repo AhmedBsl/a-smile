@@ -31,6 +31,7 @@ export default function CheckoutPage() {
     bureaus: [] as string[],
   });
   const [submitted, setSubmitted] = useState(false);
+  const [orderId, setOrderId] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const selectedWilaya = ALL_WILAYAS.find((w) => w.id === formData.wilaya);
@@ -86,21 +87,10 @@ export default function CheckoutPage() {
     };
 
     createOrder(order);
+    setOrderId(orderId);
     setSubmitted(true);
-    setTimeout(() => router.push(`/order/${orderId}`), 2000);
+    setTimeout(() => router.push(`/order/${orderId}`), 3000);
   };
-
-  if (cart.length === 0) {
-    return (
-      <main className="bg-background min-h-screen">
-        <Header />
-        <div className="container mx-auto px-4 py-12 text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">سلتك فارغة</h1>
-          <Link href="/shop" className="text-primary hover:underline font-bold">المتابعة للتسوق</Link>
-        </div>
-      </main>
-    );
-  }
 
   if (submitted) {
     return (
@@ -115,7 +105,24 @@ export default function CheckoutPage() {
             <Check className="w-10 h-10" />
           </motion.div>
           <h1 className="text-3xl font-black text-foreground mb-2">تم الطلب بنجاح!</h1>
-          <p className="text-muted-foreground">ادفعي عند الاستلام. جارِ التحويل...</p>
+          <p className="text-muted-foreground mb-4">ادفعي عند الاستلام عند وصول الطلب</p>
+          <div className="inline-block bg-card border border-border rounded-2xl p-6 mb-6">
+            <p className="text-sm text-muted-foreground mb-1">رقم الطلب</p>
+            <p className="text-2xl font-black text-primary font-mono" dir="ltr">{orderId}</p>
+          </div>
+          <p className="text-sm text-muted-foreground">جارِ التحويل لصفحة التتبع...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (cart.length === 0) {
+    return (
+      <main className="bg-background min-h-screen">
+        <Header />
+        <div className="container mx-auto px-4 py-12 text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">سلتك فارغة</h1>
+          <Link href="/shop" className="text-primary hover:underline font-bold">المتابعة للتسوق</Link>
         </div>
       </main>
     );
