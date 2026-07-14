@@ -169,13 +169,17 @@ export default function CheckoutPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-bold mb-1.5">البلدية *</label>
-                  <input
-                    type="text"
+                  <select
                     value={formData.commune}
                     onChange={(e) => setFormData({ ...formData, commune: e.target.value })}
-                    className={`w-full px-4 py-3 border rounded-xl bg-background text-sm ${errors.commune ? 'border-destructive' : 'border-border'} focus:outline-none focus:border-primary`}
-                    placeholder="اسم البلدية"
-                  />
+                    disabled={!formData.wilaya}
+                    className={`w-full px-4 py-3 border rounded-xl bg-background text-sm disabled:opacity-50 ${errors.commune ? 'border-destructive' : 'border-border'} focus:outline-none focus:border-primary`}
+                  >
+                    <option value="">اختر البلدية</option>
+                    {(selectedWilaya?.communes || []).map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
                   {errors.commune && <p className="text-xs text-destructive mt-1">{errors.commune}</p>}
                 </div>
               </div>
