@@ -4,14 +4,14 @@ import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Header } from '@/components/header';
 import { useStore } from '@/lib/store';
-import { SAMPLE_PRODUCTS } from '@/lib/sample-data';
+import { COLLECTIONS } from '@/lib/sample-data';
 import { formatDZD } from '@/lib/format';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, ShoppingBag, Minus, Plus, ChevronDown, Check, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-const SIZES = ['S', 'M', 'L', 'XL', 'فري سايز'];
-const COLORS = [
+const DEFAULT_SIZES = ['S', 'M', 'L', 'XL', 'فري سايز'];
+const DEFAULT_COLORS = [
   { name: 'أسود', value: '#1A1A2E' },
   { name: 'أبيض', value: '#FFFFFF' },
   { name: 'وردي', value: '#F06292' },
@@ -20,24 +20,48 @@ const COLORS = [
   { name: 'زيتي', value: '#556B2F' },
 ];
 
+const COLOR_MAP: Record<string, string> = {
+  'أسود': '#1A1A2E',
+  'أبيض': '#FFFFFF',
+  'وردي': '#F06292',
+  'أحمر': '#E91E63',
+  'نود': '#D4A574',
+  'زيتي': '#556B2F',
+  'كحلي': '#1B3A5C',
+  'رمادي': '#9E9E9E',
+  'بيج': '#D4B896',
+  'بني': '#8B6F47',
+  'ذهبي': '#C9A84C',
+  'فضي': '#C0C0C0',
+  'وردي فاتح': '#F8BBD0',
+  'أزرق': '#2196F3',
+  'أخضر': '#4CAF50',
+  'بنفسجي': '#9C27B0',
+};
+
 export default function ProductPage() {
   const params = useParams();
   const router = useRouter();
   const addToCart = useStore((state) => state.addToCart);
+  const allProducts = useStore((state) => state.products);
 
-  const product = SAMPLE_PRODUCTS.find((p) => p.id === params.id);
+  const product = allProducts.find((p) => p.id === params.id);
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState(product?.size || '');
-  const [selectedColor, setSelectedColor] = useState(product?.color || '');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
   const [showVariants, setShowVariants] = useState(false);
   const [added, setAdded] = useState(false);
 
-  // For multi-piece products
+  const productSizes = product?.sizes?.length ? product.sizes : DEFAULT_SIZES;
+  const productColors = product?.colors?.length
+    ? product.colors.map((c) => ({ name: c, value: COLOR_MAP[c] || '#999' }))
+    : DEFAULT_COLORS;
+
   const pieceCount = product?.pieces || 1;
   const [pieceSelections, setPieceSelections] = useState(
     Array.from({ length: pieceCount }, () => ({
-      size: product?.size || 'M',
-      color: product?.color || 'أسود',
+      size: productSizes[0] || 'M',
+      color: productColors[0]?.name || 'أسود',
     }))
   );
   const [expandedPiece, setExpandedPiece] = useState<number | null>(0);
@@ -174,7 +198,7 @@ export default function ProductPage() {
                             <div>
                               <p className="text-xs font-bold text-muted-foreground mb-2">المقاس</p>
                               <div className="flex flex-wrap gap-2">
-                                {SIZES.map((size) => (
+                                {productSizes.map((size) => (
                                   <button
                                     key={size}
                                     onClick={() => {
@@ -197,7 +221,7 @@ export default function ProductPage() {
                             <div>
                               <p className="text-xs font-bold text-muted-foreground mb-2">اللون</p>
                               <div className="flex flex-wrap gap-2">
-                                {COLORS.map((color) => (
+                                {productColors.map((color) => (
                                   <button
                                     key={color.name}
                                     onClick={() => {
@@ -236,7 +260,7 @@ export default function ProductPage() {
                 <div>
                   <p className="text-sm font-bold mb-2">المقاس</p>
                   <div className="flex flex-wrap gap-2">
-                    {SIZES.map((size) => (
+                    {productSizes.map((size) => (
                       <button
                         key={size}
                         onClick={() => setSelectedSize(size)}
@@ -255,7 +279,7 @@ export default function ProductPage() {
                 <div>
                   <p className="text-sm font-bold mb-2">اللون</p>
                   <div className="flex flex-wrap gap-2">
-                    {COLORS.map((color) => (
+                    {productColors.map((color) => (
                       <button
                         key={color.name}
                         onClick={() => setSelectedColor(color.name)}

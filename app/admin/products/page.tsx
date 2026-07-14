@@ -13,9 +13,13 @@ const emptyForm = {
   name: '',
   description: '',
   price: 0,
+  oldPrice: 0,
   image: '',
   category: COLLECTIONS[0].id,
   stock: 0,
+  sizes: [] as string[],
+  colors: [] as string[],
+  rating: 0,
 };
 
 export default function AdminProductsPage() {
@@ -31,6 +35,8 @@ export default function AdminProductsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState(emptyForm);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [sizeInput, setSizeInput] = useState('');
+  const [colorInput, setColorInput] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const filteredProducts = products.filter(
@@ -48,8 +54,6 @@ export default function AdminProductsPage() {
       addProduct({
         id: `prod-${Date.now()}`,
         ...formData,
-        size: 'M',
-        color: 'Black',
       });
     }
     setFormData(emptyForm);
@@ -72,9 +76,13 @@ export default function AdminProductsPage() {
       name: product.name,
       description: product.description,
       price: product.price,
+      oldPrice: product.oldPrice || 0,
       image: product.image,
       category: product.category,
       stock: product.stock,
+      sizes: product.sizes || [],
+      colors: product.colors || [],
+      rating: product.rating || 0,
     });
     setEditingId(product.id);
     setShowForm(true);
@@ -157,7 +165,7 @@ export default function AdminProductsPage() {
               rows={3}
               className="w-full px-4 py-2 border border-border rounded-sm bg-background"
             />
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input
                 type="number"
                 placeholder="السعر (د.ج)"
@@ -167,6 +175,28 @@ export default function AdminProductsPage() {
                 }
                 required
                 min={0}
+                className="px-4 py-2 border border-border rounded-sm bg-background"
+              />
+              <input
+                type="number"
+                placeholder="السعر القديم (اختياري)"
+                value={formData.oldPrice || ''}
+                onChange={(e) =>
+                  setFormData({ ...formData, oldPrice: parseFloat(e.target.value) || 0 })
+                }
+                min={0}
+                className="px-4 py-2 border border-border rounded-sm bg-background"
+              />
+              <input
+                type="number"
+                placeholder="التقييم (0-5)"
+                value={formData.rating || ''}
+                onChange={(e) =>
+                  setFormData({ ...formData, rating: Math.min(5, parseFloat(e.target.value) || 0) })
+                }
+                min={0}
+                max={5}
+                step={0.1}
                 className="px-4 py-2 border border-border rounded-sm bg-background"
               />
               <input
@@ -214,6 +244,70 @@ export default function AdminProductsPage() {
                   onChange={handleFileUpload}
                   className="hidden"
                 />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-muted-foreground mb-1">المقاسات المتاحة</label>
+                <div className="flex flex-wrap gap-1 mb-2">
+                  {formData.sizes.map((s) => (
+                    <span key={s} className="inline-flex items-center gap-1 bg-muted px-2 py-0.5 rounded-sm text-xs font-bold">
+                      {s}
+                      <button type="button" onClick={() => setFormData({ ...formData, sizes: formData.sizes.filter((x) => x !== s) })}>
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-1">
+                  <input
+                    type="text"
+                    value={sizeInput}
+                    onChange={(e) => setSizeInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && sizeInput.trim()) {
+                        e.preventDefault();
+                        if (!formData.sizes.includes(sizeInput.trim())) {
+                          setFormData({ ...formData, sizes: [...formData.sizes, sizeInput.trim()] });
+                        }
+                        setSizeInput('');
+                      }
+                    }}
+                    placeholder="أضف مقاس ثم اضغط Enter"
+                    className="flex-1 px-3 py-1.5 border border-border rounded-sm bg-background text-xs"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-muted-foreground mb-1">الألوان المتاحة</label>
+                <div className="flex flex-wrap gap-1 mb-2">
+                  {formData.colors.map((c) => (
+                    <span key={c} className="inline-flex items-center gap-1 bg-muted px-2 py-0.5 rounded-sm text-xs font-bold">
+                      {c}
+                      <button type="button" onClick={() => setFormData({ ...formData, colors: formData.colors.filter((x) => x !== c) })}>
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-1">
+                  <input
+                    type="text"
+                    value={colorInput}
+                    onChange={(e) => setColorInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && colorInput.trim()) {
+                        e.preventDefault();
+                        if (!formData.colors.includes(colorInput.trim())) {
+                          setFormData({ ...formData, colors: [...formData.colors, colorInput.trim()] });
+                        }
+                        setColorInput('');
+                      }
+                    }}
+                    placeholder="أضف لون ثم اضغط Enter"
+                    className="flex-1 px-3 py-1.5 border border-border rounded-sm bg-background text-xs"
+                  />
+                </div>
               </div>
             </div>
             <div className="flex gap-3">

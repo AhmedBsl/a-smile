@@ -11,8 +11,8 @@ export interface Product {
   image: string;
   category: string;
   stock: number;
-  size?: string;
-  color?: string;
+  sizes?: string[];
+  colors?: string[];
   rating?: number;
   pieces?: number;
 }

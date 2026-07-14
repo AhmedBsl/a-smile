@@ -4,7 +4,7 @@ import { useState, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/header';
 import { useStore } from '@/lib/store';
-import { SAMPLE_PRODUCTS, COLLECTIONS } from '@/lib/sample-data';
+import { COLLECTIONS } from '@/lib/sample-data';
 import { formatDZD } from '@/lib/format';
 import { motion } from 'framer-motion';
 import { Star, ShoppingBag, Heart, Filter, X, Search } from 'lucide-react';
@@ -21,9 +21,10 @@ function ShopContent() {
   const [showFilters, setShowFilters] = useState(false);
 
   const addToCart = useStore((state) => state.addToCart);
+  const allProducts = useStore((state) => state.products);
 
   const filteredProducts = useMemo(() => {
-    let products = [...SAMPLE_PRODUCTS];
+    let products = [...allProducts];
 
     if (searchTerm) {
       const q = searchTerm.toLowerCase();
@@ -57,7 +58,7 @@ function ShopContent() {
     return products;
   }, [selectedCategory, sortBy, searchTerm]);
 
-  const handleAddToCart = (product: typeof SAMPLE_PRODUCTS[0]) => {
+  const handleAddToCart = (product: typeof allProducts[0]) => {
     addToCart({
       productId: product.id,
       name: product.name,

@@ -4,7 +4,7 @@ import { Header } from '@/components/header';
 import { Hero } from '@/components/hero';
 import { HeroShowcase } from '@/components/hero-showcase';
 import { useStore } from '@/lib/store';
-import { SAMPLE_PRODUCTS, COLLECTIONS } from '@/lib/sample-data';
+import { COLLECTIONS } from '@/lib/sample-data';
 import { formatDZD } from '@/lib/format';
 import { motion } from 'framer-motion';
 import { Star, ShoppingBag, Heart, ArrowLeft, Users, Send } from 'lucide-react';
@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 function FeaturedSection() {
+  const products = useStore((state) => state.products);
   return (
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
@@ -27,8 +28,13 @@ function FeaturedSection() {
           <p className="text-muted-foreground">اختياراتنا لكِ — أجدد المنتجات وأكثرها رواجاً</p>
         </div>
 
+        {products.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">سيظهر هنا المنتجات بعد إضافتها من لوحة التحكم</p>
+          </div>
+        ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {SAMPLE_PRODUCTS.map((product, index) => (
+          {products.map((product, index) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 20 }}
@@ -90,6 +96,7 @@ function FeaturedSection() {
             </motion.div>
           ))}
         </div>
+        )}
 
         <div className="text-center mt-10">
           <Link
