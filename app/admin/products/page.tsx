@@ -347,10 +347,10 @@ export default function AdminProductsPage() {
           <table className="w-full text-sm">
             <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="text-left p-4 font-bold">الاسم</th>
-                <th className="text-left p-4 font-bold">المجموعة</th>
-                <th className="text-left p-4 font-bold">السعر</th>
-                <th className="text-left p-4 font-bold">المخزون</th>
+                <th className="text-right p-4 font-bold">الاسم</th>
+                <th className="text-right p-4 font-bold">المجموعة</th>
+                <th className="text-right p-4 font-bold">السعر</th>
+                <th className="text-right p-4 font-bold">المخزون</th>
                 <th className="text-left p-4 font-bold">الإجراءات</th>
               </tr>
             </thead>

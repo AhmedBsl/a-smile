@@ -320,11 +320,11 @@ export default function DeliveryPage() {
               <table className="w-full text-sm">
                 <thead className="bg-muted border-b border-border">
                   <tr>
-                    <th className="text-left px-4 py-3 font-bold">شركة الشحن</th>
-                    <th className="text-left px-4 py-3 font-bold">الولاية</th>
-                    <th className="text-left px-4 py-3 font-bold">توصيل للمنزل</th>
-                    <th className="text-left px-4 py-3 font-bold">مكتب التوصيل</th>
-                    <th className="text-left px-4 py-3 font-bold">المدة</th>
+                    <th className="text-right px-4 py-3 font-bold">شركة الشحن</th>
+                    <th className="text-right px-4 py-3 font-bold">الولاية</th>
+                    <th className="text-right px-4 py-3 font-bold">توصيل للمنزل</th>
+                    <th className="text-right px-4 py-3 font-bold">مكتب التوصيل</th>
+                    <th className="text-right px-4 py-3 font-bold">المدة</th>
                     <th className="text-left px-4 py-3 font-bold">مفعل</th>
                   </tr>
                 </thead>

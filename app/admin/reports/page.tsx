@@ -156,9 +156,9 @@ export default function ReportsPage() {
           <table className="w-full">
             <thead className="border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 font-bold text-foreground text-sm">المنتج</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground text-sm">الكمية</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground text-sm">الإيرادات</th>
+                <th className="text-right px-4 py-3 font-bold text-foreground text-sm">المنتج</th>
+                <th className="text-right px-4 py-3 font-bold text-foreground text-sm">الكمية</th>
+                <th className="text-right px-4 py-3 font-bold text-foreground text-sm">الإيرادات</th>
                 <th className="text-left px-4 py-3 font-bold text-foreground text-sm">% من الإجمالي</th>
               </tr>
             </thead>
@@ -191,11 +191,11 @@ export default function ReportsPage() {
           <table className="w-full">
             <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">رقم الطلب</th>
-                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">العميل</th>
-                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">العناصر</th>
-                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">الإجمالي</th>
-                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">الحالة</th>
+                <th className="text-right px-6 py-4 font-bold text-foreground text-sm">رقم الطلب</th>
+                <th className="text-right px-6 py-4 font-bold text-foreground text-sm">العميل</th>
+                <th className="text-right px-6 py-4 font-bold text-foreground text-sm">العناصر</th>
+                <th className="text-right px-6 py-4 font-bold text-foreground text-sm">الإجمالي</th>
+                <th className="text-right px-6 py-4 font-bold text-foreground text-sm">الحالة</th>
                 <th className="text-left px-6 py-4 font-bold text-foreground text-sm">التاريخ</th>
               </tr>
             </thead>

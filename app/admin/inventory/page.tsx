@@ -79,11 +79,11 @@ export default function InventoryPage() {
           <table className="w-full text-sm">
             <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 font-bold text-foreground">المنتج</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground">SKU</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground">المخزون</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground">السعر</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground">القيمة الإجمالية</th>
+                <th className="text-right px-4 py-3 font-bold text-foreground">المنتج</th>
+                <th className="text-right px-4 py-3 font-bold text-foreground">SKU</th>
+                <th className="text-right px-4 py-3 font-bold text-foreground">المخزون</th>
+                <th className="text-right px-4 py-3 font-bold text-foreground">السعر</th>
+                <th className="text-right px-4 py-3 font-bold text-foreground">القيمة الإجمالية</th>
                 <th className="text-left px-4 py-3 font-bold text-foreground">الحالة</th>
               </tr>
             </thead>

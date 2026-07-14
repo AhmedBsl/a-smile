@@ -92,11 +92,11 @@ export default function CustomersPage() {
           <table className="w-full text-sm">
             <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 font-bold">الاسم</th>
-                <th className="text-left px-4 py-3 font-bold">الهاتف</th>
-                <th className="text-left px-4 py-3 font-bold">البريد الإلكتروني</th>
-                <th className="text-left px-4 py-3 font-bold">الطلبات</th>
-                <th className="text-left px-4 py-3 font-bold">إجمالي الإنفاق</th>
+                <th className="text-right px-4 py-3 font-bold">الاسم</th>
+                <th className="text-right px-4 py-3 font-bold">الهاتف</th>
+                <th className="text-right px-4 py-3 font-bold">البريد الإلكتروني</th>
+                <th className="text-right px-4 py-3 font-bold">الطلبات</th>
+                <th className="text-right px-4 py-3 font-bold">إجمالي الإنفاق</th>
                 <th className="text-left px-4 py-3 font-bold">آخر طلب</th>
               </tr>
             </thead>
