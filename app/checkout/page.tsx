@@ -26,6 +26,7 @@ export default function CheckoutPage() {
     phone: '',
     wilaya: '',
     commune: '',
+    address: '',
     deliveryType: 'home' as 'home' | 'office',
     promoCode: '',
     bureaus: [] as string[],
@@ -54,6 +55,7 @@ export default function CheckoutPage() {
     }
     if (!formData.wilaya) newErrors.wilaya = 'اختر الولاية';
     if (!formData.commune) newErrors.commune = 'اختر البلدية';
+    if (formData.deliveryType === 'home' && !formData.address.trim()) newErrors.address = 'أدخل عنوان التوصيل بالتفصيل';
     if (formData.deliveryType === 'office' && formData.bureaus.length === 0) {
       newErrors.bureaus = 'اختر مكتب توصيل واحد على الأقل';
     }
@@ -77,7 +79,7 @@ export default function CheckoutPage() {
       customerName: formData.fullName || 'عميل',
       customerEmail: '',
       customerPhone: formData.phone,
-      address: '',
+      address: formData.address,
       wilaya: selectedWilaya?.name || formData.wilaya,
       commune: formData.commune,
       createdAt: new Date().toISOString(),
@@ -250,6 +252,21 @@ export default function CheckoutPage() {
                   </button>
                 </div>
               </div>
+
+              {/* Address - only when home delivery */}
+              {formData.deliveryType === 'home' && (
+                <div>
+                  <label className="block text-sm font-bold mb-1.5">العنوان بالتفصيل *</label>
+                  <input
+                    type="text"
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    className={`w-full px-4 py-3 border rounded-xl bg-background text-sm ${errors.address ? 'border-destructive' : 'border-border'} focus:outline-none focus:border-primary`}
+                    placeholder="الشارع، رقم المنزل، الحي، أي علامة مميزة..."
+                  />
+                  {errors.address && <p className="text-xs text-destructive mt-1">{errors.address}</p>}
+                </div>
+              )}
 
               {/* Bureaus - only when office delivery */}
               {formData.deliveryType === 'office' && selectedWilaya?.bureaus && (
