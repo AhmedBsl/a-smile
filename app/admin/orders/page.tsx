@@ -141,67 +141,71 @@ export default function AdminOrdersPage() {
   };
 
   const handlePrintReceipt = (order: (typeof sortedOrders)[0]) => {
-    const itemsHtml = order.items
+    const rows = order.items
       .map(
-        (item, i) =>
+        (item) =>
           `<tr>
             <td style="text-align:right;padding:4px 0;border-bottom:1px dashed #ddd;font-size:11px">${item.name}</td>
             <td style="text-align:center;padding:4px 0;border-bottom:1px dashed #ddd;font-size:11px">${item.quantity}</td>
-            <td style="text-align:left;padding:4px 0;border-bottom:1px dashed #ddd;font-size:11px">${item.price.toLocaleString()} دج</td>
+            <td style="text-align:left;padding:4px 0;border-bottom:1px dashed #ddd;font-size:11px">${item.price.toLocaleString()} DA</td>
           </tr>`
       )
       .join('');
 
-    const win = window.open('', '_blank');
-    if (!win) return;
-    win.document.write(`<!DOCTYPE html>
-<html dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <title>فاتورة - MELINA CHIC</title>
-  <style>
-    @page { margin: 0; size: 80mm auto; }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', monospace; }
-    body { padding: 10px; width: 80mm; color: #000; }
-    .header { text-align: center; margin-bottom: 8px; }
-    .header h1 { font-size: 18px; letter-spacing: 4px; font-weight: bold; }
-    .header h2 { font-size: 9px; color: #555; margin-top: 2px; }
-    .divider { border-top: 1px dashed #333; margin: 6px 0; }
-    .info { font-size: 10px; line-height: 1.6; }
-    .info-row { display: flex; justify-content: space-between; }
-    table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 11px; }
-    th { text-align: center; font-size: 10px; border-bottom: 1px solid #333; padding: 4px 0; }
-    .total { text-align: left; font-size: 13px; font-weight: bold; margin-top: 4px; padding-top: 4px; border-top: 1px double #333; }
-    .footer { text-align: center; font-size: 9px; color: #888; margin-top: 8px; border-top: 1px dashed #333; padding-top: 6px; }
-    @media print { body { -webkit-print-color-adjust: exact; } }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1>MELINA CHIC</h1>
-    <h2>${order.id}</h2>
-  </div>
-  <div class="divider"></div>
-  <div class="info">
-    <div class="info-row"><span>العميل</span><span>${order.customerName}</span></div>
-    <div class="info-row"><span>الهاتف</span><span>${order.customerPhone}</span></div>
-    <div class="info-row"><span>الولاية</span><span>${order.wilaya}</span></div>
-    <div class="info-row"><span>البلدية</span><span>${order.commune}</span></div>
-    ${order.address ? `<div class="info-row"><span>العنوان</span><span>${order.address}</span></div>` : ''}
-  </div>
-  <div class="divider"></div>
-  <table>
-    <thead><tr><th>المنتج</th><th>الكمية</th><th>السعر</th></tr></thead>
-    <tbody>${itemsHtml}</tbody>
-  </table>
-  <div class="divider"></div>
-  <div class="total">المجموع: ${order.total.toLocaleString()} دج</div>
-  <div class="divider"></div>
-  <div class="footer">الدفع عند الاستلام • شكراً لتسوقك مع MELINA CHIC</div>
-  <script>window.onload = function() { window.print(); window.close(); }</script>
-</body>
-</html>`);
-    win.document.close();
+    const addressLine = order.address
+      ? '<div style="display:flex;justify-content:space-between;font-size:10px;line-height:1.6"><span>Adresse</span><span>' + order.address + '</span></div>'
+      : '';
+
+    const shippingLine = (order.shippingCost != null && order.shippingCost > 0)
+      ? '<div style="display:flex;justify-content:space-between;font-size:10px;line-height:1.6"><span>Livraison</span><span>' + order.shippingCost.toLocaleString() + ' DA</span></div>'
+      : '';
+
+    const html = [
+      '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Facture - MELINA CHIC</title>',
+      '<style>',
+      '@page{margin:0;size:80mm auto}',
+      '*{margin:0;padding:0;box-sizing:border-box}',
+      'body{padding:10px;width:80mm;font-family:Courier New,monospace;color:#000}',
+      '.header{text-align:center;margin-bottom:8px}',
+      '.header h1{font-size:18px;letter-spacing:4px;font-weight:bold}',
+      '.header h2{font-size:9px;color:#555;margin-top:2px}',
+      '.divider{border-top:1px dashed #333;margin:6px 0}',
+      '.info{font-size:10px;line-height:1.6}',
+      '.row{display:flex;justify-content:space-between}',
+      'table{width:100%;border-collapse:collapse;margin:6px 0;font-size:11px}',
+      'th{text-align:center;font-size:10px;border-bottom:1px solid #333;padding:4px 0}',
+      '.total{text-align:right;font-size:13px;font-weight:bold;margin-top:4px;padding-top:4px;border-top:1px double #333}',
+      '.footer{text-align:center;font-size:9px;color:#888;margin-top:8px;border-top:1px dashed #333;padding-top:6px}',
+      '</style></head><body>',
+      '<div class="header"><h1>MELINA CHIC</h1><h2>' + order.id + '</h2></div>',
+      '<div class="divider"></div>',
+      '<div class="info">',
+      '<div class="row"><span>Client</span><span>' + order.customerName + '</span></div>',
+      '<div class="row"><span>Telephone</span><span>' + order.customerPhone + '</span></div>',
+      '<div class="row"><span>Wilaya</span><span>' + order.wilaya + '</span></div>',
+      '<div class="row"><span>Commune</span><span>' + order.commune + '</span></div>',
+      addressLine,
+      '</div>',
+      '<div class="divider"></div>',
+      '<table><thead><tr><th>Produit</th><th>Qte</th><th>Prix</th></tr></thead><tbody>',
+      rows,
+      '</tbody></table>',
+      '<div class="divider"></div>',
+      shippingLine,
+      '<div class="total">Total: ' + order.total.toLocaleString() + ' DA</div>',
+      '<div class="divider"></div>',
+      '<div class="footer">Paiement a la livraison - Merci pour votre commande MELINA CHIC</div>',
+      '</body></html>'
+    ].join('\n');
+
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const printWindow = window.open(url, '_blank');
+    if (printWindow) {
+      printWindow.onload = () => {
+        printWindow.print();
+      };
+    }
   };
 
   return (
