@@ -71,20 +71,20 @@ export default function DeliveryPage() {
     carrierPricing.filter((p) => p.carrier === slug);
 
   const tabs = [
-    { key: 'carriers' as const, label: 'Carriers', icon: Truck },
-    { key: 'pricing' as const, label: 'Pricing', icon: Settings },
-    { key: 'zones' as const, label: 'Zones', icon: MapPin },
+    { key: 'carriers' as const, label: 'شركات الشحن', icon: Truck },
+    { key: 'pricing' as const, label: 'التسعير', icon: Settings },
+    { key: 'zones' as const, label: 'المناطق', icon: MapPin },
   ];
 
   return (
     <AdminPageShell
-      title="Delivery"
-      subtitle="Manage carriers, pricing, and shipping zones."
+      title="التوصيل"
+      subtitle="إدارة شركات الشحن، الأسعار، ومناطق التوصيل."
       actions={
         <div className="flex items-center gap-2">
           {CARRIERS.filter((c) => isCarrierEnabled(c.slug)).length > 0 && (
             <span className="text-xs font-mono text-venom bg-venom/10 px-2 py-1 rounded-sm">
-              {CARRIERS.filter((c) => isCarrierEnabled(c.slug)).length} active
+              {CARRIERS.filter((c) => isCarrierEnabled(c.slug)).length} نشط
             </span>
           )}
         </div>
@@ -135,7 +135,7 @@ export default function DeliveryPage() {
                       <h3 className="font-black text-sm">{carrier.name}</h3>
                       {enabled && (
                         <span className="text-[9px] font-mono bg-venom/20 text-venom px-1.5 py-0.5 rounded-sm">
-                          ACTIVE
+                          نشط
                         </span>
                       )}
                     </div>
@@ -181,35 +181,35 @@ export default function DeliveryPage() {
                         {/* Info Grid */}
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                           <div className="p-3 bg-muted/30 rounded-sm">
-                            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">Coverage</p>
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">التغطية</p>
                             <p className="text-sm font-bold flex items-center gap-1.5">
                               <Globe className="w-3.5 h-3.5 text-primary" />
-                              {carrier.coverage === 'nationwide' ? '58 Wilayas' : carrier.coverage === 'major-cities' ? 'Major Cities' : 'Targeted'}
+                              {carrier.coverage === 'nationwide' ? '58 ولاية' : carrier.coverage === 'major-cities' ? 'المدن الكبرى' : 'مستهدفة'}
                             </p>
                           </div>
                           <div className="p-3 bg-muted/30 rounded-sm">
-                            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">Delivery</p>
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">التوصيل</p>
                             <p className="text-sm font-bold flex items-center gap-1.5">
                               <Truck className="w-3.5 h-3.5 text-primary" />
-                              {carrier.estimatedDays} days
+                              {carrier.estimatedDays} أيام
                             </p>
                           </div>
                           <div className="p-3 bg-muted/30 rounded-sm">
-                            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">Services</p>
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">الخدمات</p>
                             <div className="flex gap-1.5">
                               {carrier.homeDelivery && (
-                                <span className="text-[9px] font-mono bg-primary/10 text-primary px-1.5 py-0.5 rounded-sm">Home</span>
+                                <span className="text-[9px] font-mono bg-primary/10 text-primary px-1.5 py-0.5 rounded-sm">منزل</span>
                               )}
                               {carrier.stopDesk && (
-                                <span className="text-[9px] font-mono bg-clay/10 text-clay px-1.5 py-0.5 rounded-sm">Desk</span>
+                                <span className="text-[9px] font-mono bg-clay/10 text-clay px-1.5 py-0.5 rounded-sm">مكتب</span>
                               )}
                             </div>
                           </div>
                           <div className="p-3 bg-muted/30 rounded-sm">
-                            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">Auth</p>
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">المصادقة</p>
                             <p className="text-sm font-bold flex items-center gap-1.5">
                               <Shield className="w-3.5 h-3.5 text-primary" />
-                              {carrier.authType === 'key-token' ? 'Key + Token' : carrier.authType === 'id-token' ? 'ID + Token' : 'Token'}
+                              {carrier.authType === 'key-token' ? 'مفتاح + رمز' : carrier.authType === 'id-token' ? 'معرف + رمز' : 'رمز'}
                             </p>
                           </div>
                         </div>
@@ -219,7 +219,7 @@ export default function DeliveryPage() {
                           <div className="flex items-center justify-between mb-3">
                             <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
                               <Zap className="w-3.5 h-3.5" />
-                              API Credentials
+                              بيانات API
                             </h4>
                             <a
                               href={carrier.website}
@@ -227,7 +227,7 @@ export default function DeliveryPage() {
                               rel="noopener noreferrer"
                               className="text-xs text-primary hover:underline flex items-center gap-1"
                             >
-                              Get API keys <ExternalLink className="w-3 h-3" />
+                              الحصول على مفاتيح API <ExternalLink className="w-3 h-3" />
                             </a>
                           </div>
 
@@ -254,13 +254,13 @@ export default function DeliveryPage() {
                                   onClick={() => saveCredentials(carrier.slug)}
                                   className="flex items-center gap-1.5 px-3 py-1.5 bg-venom text-charcoal text-xs font-bold rounded-sm"
                                 >
-                                  <Check className="w-3 h-3" /> Save
+                                  <Check className="w-3 h-3" /> حفظ
                                 </button>
                                 <button
                                   onClick={() => { setEditCarrier(null); setTempCredentials({}); }}
                                   className="flex items-center gap-1.5 px-3 py-1.5 border border-border text-xs font-bold rounded-sm hover:bg-muted"
                                 >
-                                  <X className="w-3 h-3" /> Cancel
+                                  <X className="w-3 h-3" /> إلغاء
                                 </button>
                               </div>
                             </div>
@@ -281,17 +281,17 @@ export default function DeliveryPage() {
                                     }}
                                     className="text-xs text-primary hover:underline mt-2"
                                   >
-                                    Update credentials
+                                    تحديث بيانات الاعتماد
                                   </button>
                                 </div>
                               ) : (
                                 <div className="text-center py-3">
-                                  <p className="text-xs text-muted-foreground mb-2">No credentials configured</p>
+                                  <p className="text-xs text-muted-foreground mb-2">لا توجد بيانات اعتماد</p>
                                   <button
                                     onClick={() => setEditCarrier(carrier.slug)}
                                     className="text-xs text-primary hover:underline"
                                   >
-                                    Add credentials
+                                    إضافة بيانات اعتماد
                                   </button>
                                 </div>
                               )}
@@ -320,19 +320,19 @@ export default function DeliveryPage() {
               <table className="w-full text-sm">
                 <thead className="bg-muted border-b border-border">
                   <tr>
-                    <th className="text-left px-4 py-3 font-bold">Carrier</th>
-                    <th className="text-left px-4 py-3 font-bold">Wilaya</th>
-                    <th className="text-left px-4 py-3 font-bold">Home Delivery</th>
-                    <th className="text-left px-4 py-3 font-bold">Stop Desk</th>
-                    <th className="text-left px-4 py-3 font-bold">Days</th>
-                    <th className="text-left px-4 py-3 font-bold">Active</th>
+                    <th className="text-left px-4 py-3 font-bold">شركة الشحن</th>
+                    <th className="text-left px-4 py-3 font-bold">الولاية</th>
+                    <th className="text-left px-4 py-3 font-bold">توصيل للمنزل</th>
+                    <th className="text-left px-4 py-3 font-bold">مكتب التوصيل</th>
+                    <th className="text-left px-4 py-3 font-bold">المدة</th>
+                    <th className="text-left px-4 py-3 font-bold">مفعل</th>
                   </tr>
                 </thead>
                 <tbody>
                   {carrierPricing.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground text-sm">
-                        No pricing configured. Enable carriers first.
+                        لا توجد تسعيرة مُحددة. فعّل شركات الشحن أولاً.
                       </td>
                     </tr>
                   ) : (
@@ -355,7 +355,7 @@ export default function DeliveryPage() {
                           <td className="px-4 py-2.5 font-mono text-xs">
                             {pricing.stopDesk > 0 ? formatDZD(pricing.stopDesk) : '—'}
                           </td>
-                          <td className="px-4 py-2.5 text-muted-foreground text-xs">{pricing.estimatedDays}d</td>
+                          <td className="px-4 py-2.5 text-muted-foreground text-xs">{pricing.estimatedDays} ي</td>
                           <td className="px-4 py-2.5">
                             <button
                               onClick={() =>
@@ -423,8 +423,8 @@ export default function DeliveryPage() {
           <div className="flex items-start gap-3 p-4 bg-primary/5 border border-primary/20 rounded-sm">
             <Truck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
             <p className="text-sm text-muted-foreground">
-              Delivery fees are calculated at checkout based on the selected carrier and wilaya.
-              Cash on delivery (COD) is the default payment method.
+              يتم حساب رسوم التوصيل عند الدفع بناءً على شركة الشحن والولاية المختارة.
+              الدفع عند الاستلام (COD) هو طريقة الدفع الافتراضية.
             </p>
           </div>
         </div>

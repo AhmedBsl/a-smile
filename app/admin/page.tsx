@@ -45,7 +45,7 @@ export default function AdminDashboard() {
 
   const stats = [
     {
-      title: 'Orders This Month',
+      title: 'طلبات هذا الشهر',
       value: thisMonth.length.toString(),
       icon: ShoppingCart,
       href: '/admin/orders',
@@ -53,7 +53,7 @@ export default function AdminDashboard() {
       bgColor: 'bg-primary/10',
     },
     {
-      title: 'New Orders',
+      title: 'طلبات جديدة',
       value: newOrders.length.toString(),
       icon: AlertTriangle,
       href: '/admin/orders',
@@ -62,7 +62,7 @@ export default function AdminDashboard() {
       highlight: newOrders.length > 0,
     },
     {
-      title: 'Total Revenue',
+      title: 'إجمالي الإيرادات',
       value: formatDZD(totalRevenue),
       icon: TrendingUp,
       href: '/admin/analytics',
@@ -70,7 +70,7 @@ export default function AdminDashboard() {
       bgColor: 'bg-venom/10',
     },
     {
-      title: 'Products',
+      title: 'المنتجات',
       value: products.length.toString(),
       icon: Package,
       href: '/admin/products',
@@ -78,6 +78,13 @@ export default function AdminDashboard() {
       bgColor: 'bg-accent/10',
     },
   ];
+
+  const statusLabels: Record<string, string> = {
+    pending: 'قيد الانتظار',
+    processing: 'قيد المعالجة',
+    shipped: 'تم الشحن',
+    delivered: 'تم التوصيل',
+  };
 
   const statusColors: Record<string, string> = {
     pending: 'bg-yellow-500/20 text-yellow-700',
@@ -96,8 +103,8 @@ export default function AdminDashboard() {
 
   return (
     <AdminPageShell
-      title="Dashboard"
-      subtitle="Your store at a glance — orders, revenue, and stock."
+      title="لوحة التحكم"
+      subtitle="نظرة عامة على متجرك — الطلبات، الإيرادات، والمخزون."
     >
       {showPasswordBanner && (
         <motion.div
@@ -106,13 +113,13 @@ export default function AdminDashboard() {
           className="mb-6 p-4 bg-primary/10 border border-primary/30 rounded-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
         >
           <p className="text-sm font-semibold text-foreground">
-            You&apos;re using the starter password. Change it in Settings for better security.
+            أنت تستخدم كلمة المرور الافتراضية. قم بتغييرها في الإعدادات لتحسين الأمان.
           </p>
           <Link
             href="/admin/settings"
             className="text-sm font-bold text-primary hover:underline shrink-0"
           >
-            Change password →
+            تغيير كلمة المرور ←
           </Link>
         </motion.div>
       )}
@@ -156,10 +163,10 @@ export default function AdminDashboard() {
       {/* Quick Stats Bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
         {[
-          { label: 'Delivered', value: deliveredOrders, color: 'text-venom' },
-          { label: 'Pending', value: newOrders.length, color: 'text-yellow-600' },
-          { label: 'Low Stock', value: lowStock.length, color: 'text-primary' },
-          { label: 'Avg Value', value: formatDZD(orders.length > 0 ? totalRevenue / orders.length : 0), color: 'text-foreground' },
+          { label: 'تم التوصيل', value: deliveredOrders, color: 'text-venom' },
+          { label: 'قيد الانتظار', value: newOrders.length, color: 'text-yellow-600' },
+          { label: 'مخزون منخفض', value: lowStock.length, color: 'text-primary' },
+          { label: 'متوسط القيمة', value: formatDZD(orders.length > 0 ? totalRevenue / orders.length : 0), color: 'text-foreground' },
         ].map((item) => (
           <div key={item.label} className="bg-muted/50 rounded-sm p-3 text-center">
             <p className={`text-lg font-black font-mono ${item.color}`}>{item.value}</p>
@@ -172,15 +179,15 @@ export default function AdminDashboard() {
         {/* Recent Orders */}
         <div className="lg:col-span-2 bg-card border border-border rounded-sm">
           <div className="flex items-center justify-between p-5 border-b border-border">
-            <h2 className="font-black text-sm uppercase tracking-wider">Recent Orders</h2>
+            <h2 className="font-black text-sm uppercase tracking-wider">آخر الطلبات</h2>
             <Link href="/admin/orders" className="text-xs text-primary font-bold hover:underline">
-              View all →
+              عرض الكل ←
             </Link>
           </div>
           <div className="divide-y divide-border">
             {recentOrders.length === 0 ? (
               <p className="text-muted-foreground text-center py-12 text-sm">
-                No orders yet — they&apos;ll appear here when customers checkout.
+                لا توجد طلبات بعد — ستظهر هنا عندما يقوم العملاء بالشراء.
               </p>
             ) : (
               recentOrders.map((order) => {
@@ -213,7 +220,7 @@ export default function AdminDashboard() {
                           statusColors[order.status] ?? 'bg-muted text-muted-foreground'
                         }`}
                       >
-                        {order.status}
+                        {statusLabels[order.status] || order.status}
                       </span>
                     </div>
                   </Link>
@@ -228,15 +235,15 @@ export default function AdminDashboard() {
           {/* Low Stock */}
           <div className="bg-card border border-border rounded-sm">
             <div className="flex items-center justify-between p-5 border-b border-border">
-              <h2 className="font-black text-sm uppercase tracking-wider">Low Stock</h2>
+              <h2 className="font-black text-sm uppercase tracking-wider">مخزون منخفض</h2>
               <Link href="/admin/inventory" className="text-xs text-primary font-bold hover:underline">
-                Manage →
+                إدارة ←
               </Link>
             </div>
             <div className="p-3 space-y-1">
               {lowStock.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-6">
-                  All products well stocked
+                  جميع المنتجات متوفرة بشكل جيد
                 </p>
               ) : (
                 lowStock.slice(0, 5).map((product) => (
@@ -247,7 +254,7 @@ export default function AdminDashboard() {
                   >
                     <span className="text-xs font-semibold truncate">{product.name}</span>
                     <span className="text-[10px] font-mono font-bold text-primary shrink-0 ml-2">
-                      {product.stock} left
+                      {product.stock} متبقي
                     </span>
                   </Link>
                 ))
@@ -258,11 +265,11 @@ export default function AdminDashboard() {
           {/* Top Products */}
           <div className="bg-card border border-border rounded-sm">
             <div className="p-5 border-b border-border">
-              <h2 className="font-black text-sm uppercase tracking-wider">Top Products</h2>
+              <h2 className="font-black text-sm uppercase tracking-wider">أفضل المنتجات</h2>
             </div>
             <div className="p-3 space-y-1">
               {topProducts.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-6">No products yet</p>
+                <p className="text-sm text-muted-foreground text-center py-6">لا توجد منتجات بعد</p>
               ) : (
                 topProducts.map((product, i) => (
                   <div

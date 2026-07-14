@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useStore, Product } from '@/lib/store';
 import { AdminPageShell } from '@/components/admin-page-shell';
 import { motion } from 'framer-motion';
@@ -13,11 +13,13 @@ const emptyForm = {
   description: '',
   price: 0,
   image: '',
-  category: COLLECTIONS[0],
+  category: COLLECTIONS[0].id,
   stock: 0,
 };
 
 export default function AdminProductsPage() {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => { setHydrated(true); }, []);
   const products = useStore((state) => state.products);
   const addProduct = useStore((state) => state.addProduct);
   const updateProduct = useStore((state) => state.updateProduct);
@@ -65,10 +67,20 @@ export default function AdminProductsPage() {
     setShowForm(true);
   };
 
+  if (!hydrated) {
+    return (
+      <AdminPageShell title="المنتجات" subtitle="إدارة كتالوجك — الأسعار بالدينار الجزائري.">
+        <div className="flex items-center justify-center py-20 text-muted-foreground">
+          <div className="animate-pulse">جارٍ التحميل...</div>
+        </div>
+      </AdminPageShell>
+    );
+  }
+
   return (
     <AdminPageShell
-      title="Products"
-      subtitle="Manage your catalog — prices in DZD."
+      title="المنتجات"
+      subtitle="إدارة كتالوجك — الأسعار بالدينار الجزائري."
       actions={
         <button
           onClick={() => {
@@ -79,7 +91,7 @@ export default function AdminProductsPage() {
           className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-sm font-bold text-sm hover:bg-redDim transition-colors"
         >
           <Plus className="w-4 h-4" />
-          Add Product
+          إضافة منتج
         </button>
       }
     >
@@ -90,7 +102,7 @@ export default function AdminProductsPage() {
           className="bg-card border border-border rounded-sm p-5 mb-6"
         >
           <div className="flex items-center justify-between mb-5">
-            <h2 className="font-black">{editingId ? 'Edit Product' : 'New Product'}</h2>
+            <h2 className="font-black">{editingId ? 'تعديل المنتج' : 'منتج جديد'}</h2>
             <button
               type="button"
               onClick={() => {
@@ -106,7 +118,7 @@ export default function AdminProductsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input
                 type="text"
-                placeholder="Product name"
+                placeholder="اسم المنتج"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
@@ -118,14 +130,14 @@ export default function AdminProductsPage() {
                 className="px-4 py-2 border border-border rounded-sm bg-background"
               >
                 {COLLECTIONS.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
+                  <option key={c.id} value={c.id}>
+                    {c.icon} {c.name}
                   </option>
                 ))}
               </select>
             </div>
             <textarea
-              placeholder="Description"
+              placeholder="الوصف"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
@@ -135,7 +147,7 @@ export default function AdminProductsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <input
                 type="number"
-                placeholder="Price (DZD)"
+                placeholder="السعر (د.ج)"
                 value={formData.price || ''}
                 onChange={(e) =>
                   setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })
@@ -146,7 +158,7 @@ export default function AdminProductsPage() {
               />
               <input
                 type="number"
-                placeholder="Stock"
+                placeholder="المخزون"
                 value={formData.stock || ''}
                 onChange={(e) =>
                   setFormData({ ...formData, stock: parseInt(e.target.value, 10) || 0 })
@@ -157,7 +169,7 @@ export default function AdminProductsPage() {
               />
               <input
                 type="url"
-                placeholder="Image URL"
+                placeholder="رابط الصورة"
                 value={formData.image}
                 onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                 required
@@ -170,14 +182,14 @@ export default function AdminProductsPage() {
                 className="flex-1 bg-primary text-primary-foreground py-2.5 font-bold rounded-sm flex items-center justify-center gap-2"
               >
                 <Check className="w-4 h-4" />
-                {editingId ? 'Save Changes' : 'Add Product'}
+                {editingId ? 'حفظ التغييرات' : 'إضافة منتج'}
               </button>
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
                 className="flex-1 border border-border py-2.5 font-bold rounded-sm hover:bg-muted"
               >
-                Cancel
+                إلغاء
               </button>
             </div>
           </form>
@@ -186,7 +198,7 @@ export default function AdminProductsPage() {
 
       <input
         type="text"
-        placeholder="Search products..."
+        placeholder="البحث عن منتجات..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="w-full px-4 py-2.5 border border-border rounded-sm bg-card mb-6"
@@ -195,17 +207,17 @@ export default function AdminProductsPage() {
       <div className="overflow-x-auto bg-card border border-border rounded-sm">
         {filteredProducts.length === 0 ? (
           <p className="text-center py-12 text-muted-foreground text-sm">
-            {searchTerm ? 'No products found' : 'No products yet — add your first piece.'}
+            {searchTerm ? 'لا توجد منتجات مطابقة' : 'لا توجد منتجات بعد — أضف منتجك الأول.'}
           </p>
         ) : (
           <table className="w-full text-sm">
             <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="text-left p-4 font-bold">Name</th>
-                <th className="text-left p-4 font-bold">Collection</th>
-                <th className="text-left p-4 font-bold">Price</th>
-                <th className="text-left p-4 font-bold">Stock</th>
-                <th className="text-left p-4 font-bold">Actions</th>
+                <th className="text-left p-4 font-bold">الاسم</th>
+                <th className="text-left p-4 font-bold">المجموعة</th>
+                <th className="text-left p-4 font-bold">السعر</th>
+                <th className="text-left p-4 font-bold">المخزون</th>
+                <th className="text-left p-4 font-bold">الإجراءات</th>
               </tr>
             </thead>
             <tbody>
@@ -214,7 +226,8 @@ export default function AdminProductsPage() {
                   <td className="p-4 font-semibold">{product.name}</td>
                   <td className="p-4">
                     <span className="text-xs font-mono bg-muted px-2 py-1 rounded-sm">
-                      {product.category}
+                      {COLLECTIONS.find((col) => col.id === product.category)?.icon}{' '}
+                      {COLLECTIONS.find((col) => col.id === product.category)?.name || product.category}
                     </span>
                   </td>
                   <td className="p-4 font-mono font-bold text-primary">
@@ -251,7 +264,7 @@ export default function AdminProductsPage() {
                           }}
                           className="px-2 py-1 text-xs font-bold bg-destructive text-white rounded-sm"
                         >
-                          Confirm
+                          تأكيد
                         </button>
                       ) : (
                         <button

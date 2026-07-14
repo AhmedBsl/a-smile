@@ -53,15 +53,15 @@ export default function CustomersPage() {
 
   return (
     <AdminPageShell
-      title="Customers"
-      subtitle="Derived from order history — keyed by phone number."
+      title="العملاء"
+      subtitle="مشتقة من سجل الطلبات — مرتبة حسب رقم الهاتف."
     >
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         {[
-          { label: 'Total Customers', value: customers.length, icon: Users },
-          { label: 'Total Revenue', value: formatDZD(totalRevenue), icon: TrendingUp },
-          { label: 'Avg Order Value', value: formatDZD(avgOrderValue), icon: BarChart3 },
-          { label: 'Repeat Customers', value: repeatCustomers, icon: Star },
+          { label: 'إجمالي العملاء', value: customers.length, icon: Users },
+          { label: 'إجمالي الإيرادات', value: formatDZD(totalRevenue), icon: TrendingUp },
+          { label: 'متوسط قيمة الطلب', value: formatDZD(avgOrderValue), icon: BarChart3 },
+          { label: 'عملاء متكررون', value: repeatCustomers, icon: Star },
         ].map((kpi, index) => {
           const Icon = kpi.icon;
           return (
@@ -86,25 +86,25 @@ export default function CustomersPage() {
 
       <div className="bg-card border border-border rounded-sm overflow-hidden">
         <div className="p-4 border-b border-border">
-          <h2 className="font-black">All Customers ({customers.length})</h2>
+          <h2 className="font-black">كل العملاء ({customers.length})</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 font-bold">Name</th>
-                <th className="text-left px-4 py-3 font-bold">Phone</th>
-                <th className="text-left px-4 py-3 font-bold">Email</th>
-                <th className="text-left px-4 py-3 font-bold">Orders</th>
-                <th className="text-left px-4 py-3 font-bold">Total Spent</th>
-                <th className="text-left px-4 py-3 font-bold">Last Order</th>
+                <th className="text-left px-4 py-3 font-bold">الاسم</th>
+                <th className="text-left px-4 py-3 font-bold">الهاتف</th>
+                <th className="text-left px-4 py-3 font-bold">البريد الإلكتروني</th>
+                <th className="text-left px-4 py-3 font-bold">الطلبات</th>
+                <th className="text-left px-4 py-3 font-bold">إجمالي الإنفاق</th>
+                <th className="text-left px-4 py-3 font-bold">آخر طلب</th>
               </tr>
             </thead>
             <tbody>
               {customers.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="text-center py-12 text-muted-foreground">
-                    No customers yet — they appear when orders are placed.
+                    لا يوجد عملاء بعد — يظهرون عند تقديم الطلبات.
                   </td>
                 </tr>
               ) : (
@@ -130,7 +130,7 @@ export default function CustomersPage() {
 
       {topCustomers.length > 0 && (
         <div className="mt-6">
-          <h2 className="font-black mb-3">Top Customers</h2>
+          <h2 className="font-black mb-3">أفضل العملاء</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {topCustomers.map((c) => (
               <div key={c.key} className="bg-card border border-border rounded-sm p-4">

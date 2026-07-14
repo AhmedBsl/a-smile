@@ -23,7 +23,7 @@ export default function AdminLayout({
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-muted-foreground font-mono text-sm animate-pulse">
-          Loading admin...
+          جاري تحميل لوحة التحكم...
         </div>
       </div>
     );

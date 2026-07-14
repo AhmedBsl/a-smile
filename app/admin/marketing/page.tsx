@@ -9,18 +9,18 @@ export default function AdminMarketingPage() {
   const [tab, setTab] = useState<'overview' | 'promos' | 'reviews'>('overview');
 
   const promoFeatures = [
-    { icon: Percent, title: 'Discount Codes', description: 'Create percentage or fixed-amount promo codes for your customers' },
-    { icon: Gift, title: 'Seasonal Sales', description: 'Set up time-limited promotions for holidays and events' },
-    { icon: Mail, title: 'Email Campaigns', description: 'Send promotional emails to your customer list' },
-    { icon: Share2, title: 'Social Media', description: 'Schedule and manage social media posts' },
-    { icon: MessageSquare, title: 'Reviews', description: 'Manage customer reviews on your products' },
-    { icon: Tag, title: 'Loyalty Rewards', description: 'Reward repeat customers with exclusive deals' },
+    { icon: Percent, title: 'أكواد الخصم', description: 'إنشاء أكواد خصم بنسبة مئوية أو مبلغ ثابت لعملائك' },
+    { icon: Gift, title: 'التخفيضات الموسمية', description: 'إعداد عروض محددة الوقت للمناسبات والعطلات' },
+    { icon: Mail, title: 'حملات البريد الإلكتروني', description: 'إرسال رسائل بريد إلكتروني ترويجية لقائمة عملائك' },
+    { icon: Share2, title: 'وسائل التواصل', description: 'جدولة وإدارة منشورات وسائل التواصل الاجتماعي' },
+    { icon: MessageSquare, title: 'التقييمات', description: 'إدارة تقييمات العملاء على منتجاتك' },
+    { icon: Tag, title: 'مكافآت الولاء', description: 'مكافأة العملاء المتكررين بعروض حصرية' },
   ];
 
   return (
     <AdminPageShell
-      title="Marketing"
-      subtitle="Manage campaigns, promo codes, and customer reviews."
+      title="التسويق"
+      subtitle="إدارة الحملات، أكواد الخصم، وتقييمات العملاء."
       actions={
         <div className="flex gap-2">
           {(['overview', 'promos', 'reviews'] as const).map((t) => (
@@ -31,7 +31,7 @@ export default function AdminMarketingPage() {
                 tab === t ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground hover:bg-muted-foreground/20'
               }`}
             >
-              {t === 'promos' ? 'Promo Codes' : t === 'reviews' ? 'Reviews' : 'Overview'}
+              {t === 'promos' ? 'أكواد الخصم' : t === 'reviews' ? 'التقييمات' : 'نظرة عامة'}
             </button>
           ))}
         </div>
@@ -67,8 +67,8 @@ export default function AdminMarketingPage() {
             transition={{ delay: 0.4 }}
             className="md:col-span-2 lg:col-span-3 bg-card border-2 border-dashed border-primary/30 p-12 rounded-sm text-center mt-4"
           >
-            <p className="text-2xl font-black text-foreground mb-2">Coming Soon</p>
-            <p className="text-sm text-muted-foreground">Advanced marketing tools and automation are being prepared.</p>
+             <p className="text-2xl font-black text-foreground mb-2">قريباً</p>
+             <p className="text-sm text-muted-foreground">أدوات التسويق المتقدمة والأتمتة قيد الإعداد.</p>
           </motion.div>
         </motion.div>
       )}
@@ -76,10 +76,10 @@ export default function AdminMarketingPage() {
       {tab === 'promos' && (
         <div className="bg-card border border-border rounded-sm p-12 text-center">
           <Tag className="w-12 h-12 text-primary/30 mx-auto mb-4" />
-          <p className="text-xl font-black text-foreground mb-2">No promo codes yet</p>
-          <p className="text-sm text-muted-foreground mb-4">Create your first promo code to offer discounts to customers.</p>
+          <p className="text-xl font-black text-foreground mb-2">لا توجد أكواد خصم بعد</p>
+          <p className="text-sm text-muted-foreground mb-4">أنشئ أول كود خصم لتقديم تخفيضات للعملاء.</p>
           <button className="bg-primary text-primary-foreground px-6 py-2.5 font-bold rounded-sm text-sm">
-            Create Promo Code
+            إنشاء كود خصم
           </button>
         </div>
       )}
@@ -87,10 +87,10 @@ export default function AdminMarketingPage() {
       {tab === 'reviews' && (
         <div className="bg-card border border-border rounded-sm p-12 text-center">
           <MessageSquare className="w-12 h-12 text-primary/30 mx-auto mb-4" />
-          <p className="text-xl font-black text-foreground mb-2">No reviews yet</p>
-          <p className="text-sm text-muted-foreground mb-4">Customer reviews will appear here once they leave feedback on your products.</p>
+          <p className="text-xl font-black text-foreground mb-2">لا توجد تقييمات بعد</p>
+          <p className="text-sm text-muted-foreground mb-4">ستظهر تقييمات العملاء هنا بمجرد تركهم ملاحظات على منتجاتك.</p>
           <button className="bg-primary text-primary-foreground px-6 py-2.5 font-bold rounded-sm text-sm">
-            Add Manual Review
+            إضافة تقييم يدوي
           </button>
         </div>
       )}

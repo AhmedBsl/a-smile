@@ -43,7 +43,7 @@ export default function ReportsPage() {
 
   const handleExportCSV = () => {
     const csv = [
-      ['Order ID', 'Customer', 'Items', 'Total', 'Status', 'Date'],
+      ['رقم الطلب', 'العميل', 'العناصر', 'الإجمالي', 'الحالة', 'التاريخ'],
       ...filteredOrders.map((o) => [
         o.id,
         o.customerName,
@@ -66,8 +66,8 @@ export default function ReportsPage() {
 
   return (
     <AdminPageShell
-      title="Reports"
-      subtitle="Sales and performance analytics"
+      title="التقارير"
+      subtitle="تحليلات المبيعات والأداء"
       actions={
         <motion.button
           onClick={handleExportCSV}
@@ -78,27 +78,27 @@ export default function ReportsPage() {
           className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-sm font-bold text-sm"
         >
           <Download className="w-4 h-4" />
-          Export CSV
+          تصدير CSV
         </motion.button>
       }
     >
       {/* Time Range Filter */}
       <div className="flex gap-2 mb-8">
-        {(['week', 'month', 'all'] as const).map((option) => (
-          <motion.button
-            key={option}
-            onClick={() => setTimeRange(option)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-sm font-semibold capitalize transition-all ${
-              timeRange === option
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-muted text-foreground hover:bg-muted-foreground/20'
-            }`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Calendar className="w-4 h-4" />
-            {option}
-          </motion.button>
+          {(['week', 'month', 'all'] as const).map((option) => (
+            <motion.button
+              key={option}
+              onClick={() => setTimeRange(option)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-sm font-semibold capitalize transition-all ${
+                timeRange === option
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-foreground hover:bg-muted-foreground/20'
+              }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Calendar className="w-4 h-4" />
+              {option === 'week' ? 'أسبوع' : option === 'month' ? 'شهر' : 'الكل'}
+            </motion.button>
         ))}
       </div>
 
@@ -110,9 +110,9 @@ export default function ReportsPage() {
           transition={{ delay: 0.1 }}
           className="bg-card border border-border rounded-sm p-6"
         >
-          <p className="text-muted-foreground text-sm mb-1">Total Revenue</p>
+          <p className="text-muted-foreground text-sm mb-1">إجمالي الإيرادات</p>
           <p className="text-3xl font-black text-foreground font-mono">{formatDZD(totalRevenue)}</p>
-          <p className="text-xs text-muted-foreground mt-2">{filteredOrders.length} orders</p>
+          <p className="text-xs text-muted-foreground mt-2">{filteredOrders.length} طلب</p>
         </motion.div>
 
         <motion.div
@@ -121,9 +121,9 @@ export default function ReportsPage() {
           transition={{ delay: 0.2 }}
           className="bg-card border border-border rounded-sm p-6"
         >
-          <p className="text-muted-foreground text-sm mb-1">Total Orders</p>
+          <p className="text-muted-foreground text-sm mb-1">إجمالي الطلبات</p>
           <p className="text-3xl font-black text-foreground font-mono">{totalOrders}</p>
-          <p className="text-xs text-muted-foreground mt-2">Last {timeRange === 'week' ? '7' : timeRange === 'month' ? '30' : 'all'} days</p>
+          <p className="text-xs text-muted-foreground mt-2">آخر {timeRange === 'week' ? '7' : timeRange === 'month' ? '30' : 'الكل'} يوم</p>
         </motion.div>
 
         <motion.div
@@ -132,9 +132,9 @@ export default function ReportsPage() {
           transition={{ delay: 0.3 }}
           className="bg-card border border-border rounded-sm p-6"
         >
-          <p className="text-muted-foreground text-sm mb-1">Avg Order Value</p>
+          <p className="text-muted-foreground text-sm mb-1">متوسط قيمة الطلب</p>
           <p className="text-3xl font-black text-foreground font-mono">{formatDZD(avgOrderValue)}</p>
-          <p className="text-xs text-muted-foreground mt-2">Per transaction</p>
+          <p className="text-xs text-muted-foreground mt-2">لكل معاملة</p>
         </motion.div>
 
         <motion.div
@@ -143,23 +143,23 @@ export default function ReportsPage() {
           transition={{ delay: 0.4 }}
           className="bg-card border border-border rounded-sm p-6"
         >
-          <p className="text-muted-foreground text-sm mb-1">Total Items Sold</p>
+          <p className="text-muted-foreground text-sm mb-1">إجمالي العناصر المباعة</p>
           <p className="text-3xl font-black text-foreground font-mono">{totalItems}</p>
-          <p className="text-xs text-muted-foreground mt-2">Products shipped</p>
+          <p className="text-xs text-muted-foreground mt-2">المنتجات المشحونة</p>
         </motion.div>
       </div>
 
       {/* Top Products */}
       <div className="bg-card border border-border rounded-sm p-6 mb-8">
-        <h2 className="text-xl font-black text-foreground mb-6">Top Selling Products</h2>
+        <h2 className="text-xl font-black text-foreground mb-6">المنتجات الأكثر مبيعاً</h2>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 font-bold text-foreground text-sm">Product</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground text-sm">Quantity</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground text-sm">Revenue</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground text-sm">% of Total</th>
+                <th className="text-left px-4 py-3 font-bold text-foreground text-sm">المنتج</th>
+                <th className="text-left px-4 py-3 font-bold text-foreground text-sm">الكمية</th>
+                <th className="text-left px-4 py-3 font-bold text-foreground text-sm">الإيرادات</th>
+                <th className="text-left px-4 py-3 font-bold text-foreground text-sm">% من الإجمالي</th>
               </tr>
             </thead>
             <tbody>
@@ -185,18 +185,18 @@ export default function ReportsPage() {
       {/* Recent Orders */}
       <div className="bg-card border border-border rounded-sm overflow-hidden">
         <div className="p-6 border-b border-border">
-          <h2 className="text-xl font-black text-foreground">Recent Orders</h2>
+          <h2 className="text-xl font-black text-foreground">آخر الطلبات</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">Order ID</th>
-                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">Customer</th>
-                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">Items</th>
-                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">Total</th>
-                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">Status</th>
-                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">Date</th>
+                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">رقم الطلب</th>
+                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">العميل</th>
+                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">العناصر</th>
+                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">الإجمالي</th>
+                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">الحالة</th>
+                <th className="text-left px-6 py-4 font-bold text-foreground text-sm">التاريخ</th>
               </tr>
             </thead>
             <tbody>
@@ -222,7 +222,7 @@ export default function ReportsPage() {
                         ? 'bg-yellow-500/20 text-yellow-700'
                         : 'bg-primary/20 text-primary'
                     }`}>
-                      {order.status}
+                      {order.status === 'pending' ? 'قيد الانتظار' : order.status === 'processing' ? 'قيد المعالجة' : order.status === 'shipped' ? 'تم الشحن' : order.status === 'delivered' ? 'تم التوصيل' : order.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-muted-foreground text-sm">{new Date(order.createdAt).toLocaleDateString()}</td>

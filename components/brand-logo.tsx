@@ -1,6 +1,6 @@
 'use client';
 
-export function BrandLogo({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
+export function BrandLogo({ size = 'md', showGlow }: { size?: 'sm' | 'md' | 'lg'; showGlow?: boolean }) {
   const sizes = {
     sm: { w: 28, h: 28, text: 'text-xs' },
     md: { w: 36, h: 36, text: 'text-sm' },
@@ -10,7 +10,7 @@ export function BrandLogo({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   const s = sizes[size];
 
   return (
-    <div className="flex items-center gap-2" aria-label="Melina Chic logo">
+    <div className="flex items-center gap-2" aria-label="شعار Melina Chic">
       <svg
         width={s.w}
         height={s.h}

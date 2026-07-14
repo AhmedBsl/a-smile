@@ -46,14 +46,14 @@ export function AdminLogin() {
         setPassword('');
         window.location.href = '/admin';
       } else {
-        setError(result.error || 'Invalid password');
+        setError(result.error || 'كلمة المرور غير صحيحة');
         setPassword('');
         if (result.lockoutRemaining) {
           setLockoutTimer(result.lockoutRemaining);
         }
       }
     } catch {
-      setError('Authentication failed. Please try again.');
+      setError('فشل التحقق. حاول مرة أخرى.');
     } finally {
       setIsLoading(false);
     }
@@ -116,7 +116,7 @@ export function AdminLogin() {
               className="relative"
             >
               <label className="block text-sm font-bold text-sand/80 mb-2">
-                Password
+                كلمة المرور
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-sand/40" />
@@ -124,7 +124,7 @@ export function AdminLogin() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={lockoutTimer > 0 ? `Locked — ${formatTime(lockoutTimer)}` : '••••••••'}
+                  placeholder={lockoutTimer > 0 ? `مقفل — ${formatTime(lockoutTimer)}` : '••••••••'}
                   autoComplete="current-password"
                   className="w-full pl-10 pr-12 py-3 bg-charcoal border border-white/10 rounded-sm text-sand placeholder-sand/30 focus:border-primary focus:outline-none transition-colors font-mono disabled:opacity-50"
                   disabled={isDisabled}
@@ -134,7 +134,7 @@ export function AdminLogin() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-sand/40 hover:text-sand transition-colors"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-label={showPassword ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور'}
                   disabled={isDisabled}
                 >
                   {showPassword ? (
@@ -167,7 +167,7 @@ export function AdminLogin() {
               disabled={isDisabled || password.length === 0}
               className="w-full bg-primary text-white py-3 rounded-sm font-black text-lg hover:bg-redDim transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Verifying...' : lockoutTimer > 0 ? `Locked — ${formatTime(lockoutTimer)}` : 'Unlock Admin'}
+              {isLoading ? 'جارٍ التحقق...' : lockoutTimer > 0 ? `مقفل — ${formatTime(lockoutTimer)}` : 'فتح لوحة التحكم'}
             </motion.button>
           </form>
 
@@ -177,8 +177,8 @@ export function AdminLogin() {
             transition={{ delay: 0.5 }}
             className="mt-8 text-center text-xs text-sand/30 font-mono"
           >
-            <p>Password protected area</p>
-            <p className="mt-1">SHA-256 hashed &middot; Brute-force protected</p>
+            <p>منطقة محمية بكلمة مرور</p>
+            <p className="mt-1">مشفّر بـ SHA-256 ومحمي من التخمين</p>
           </motion.div>
         </div>
       </motion.div>

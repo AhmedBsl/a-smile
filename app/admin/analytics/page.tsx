@@ -16,10 +16,10 @@ export default function AdminAnalyticsPage() {
   const totalProducts = products.length;
 
   const revenueByStatus = [
-    { name: 'Pending', value: orders.filter((o) => o.status === 'pending').reduce((sum, o) => sum + o.total, 0) },
-    { name: 'Processing', value: orders.filter((o) => o.status === 'processing').reduce((sum, o) => sum + o.total, 0) },
-    { name: 'Shipped', value: orders.filter((o) => o.status === 'shipped').reduce((sum, o) => sum + o.total, 0) },
-    { name: 'Delivered', value: orders.filter((o) => o.status === 'delivered').reduce((sum, o) => sum + o.total, 0) },
+    { name: 'قيد الانتظار', value: orders.filter((o) => o.status === 'pending').reduce((sum, o) => sum + o.total, 0) },
+    { name: 'قيد المعالجة', value: orders.filter((o) => o.status === 'processing').reduce((sum, o) => sum + o.total, 0) },
+    { name: 'تم الشحن', value: orders.filter((o) => o.status === 'shipped').reduce((sum, o) => sum + o.total, 0) },
+    { name: 'تم التوصيل', value: orders.filter((o) => o.status === 'delivered').reduce((sum, o) => sum + o.total, 0) },
   ].filter((item) => item.value > 0);
 
   const ordersData = Array.from({ length: 7 }, (_, i) => {
@@ -31,7 +31,7 @@ export default function AdminAnalyticsPage() {
         date.toLocaleDateString()
     );
     return {
-      date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      date: date.toLocaleDateString('ar-DZ', { month: 'short', day: 'numeric' }),
       orders: dayOrders.length,
       revenue: dayOrders.reduce((sum, o) => sum + o.total, 0),
     };
@@ -50,17 +50,17 @@ export default function AdminAnalyticsPage() {
 
   return (
     <AdminPageShell
-      title="Analytics"
-      subtitle="Sales and performance metrics across your store."
+      title="الإحصائيات"
+      subtitle="مقاييس المبيعات والأداء عبر متجرك."
     >
       <div className="space-y-6">
         {/* KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { label: 'Total Revenue', value: formatDZD(totalRevenue), color: 'text-primary' },
-            { label: 'Total Orders', value: totalOrders.toString(), color: 'text-blue-700' },
-            { label: 'Avg Order Value', value: formatDZD(avgOrderValue), color: 'text-venom' },
-            { label: 'Products', value: totalProducts.toString(), color: 'text-accent' },
+            { label: 'إجمالي الإيرادات', value: formatDZD(totalRevenue), color: 'text-primary' },
+            { label: 'إجمالي الطلبات', value: totalOrders.toString(), color: 'text-blue-700' },
+            { label: 'متوسط قيمة الطلب', value: formatDZD(avgOrderValue), color: 'text-venom' },
+            { label: 'المنتجات', value: totalProducts.toString(), color: 'text-accent' },
           ].map((kpi, index) => (
             <motion.div
               key={index}
@@ -78,7 +78,7 @@ export default function AdminAnalyticsPage() {
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-card border border-border p-5 rounded-sm">
-            <h2 className="text-lg font-black text-foreground mb-4">Orders & Revenue (Last 7 Days)</h2>
+            <h2 className="text-lg font-black text-foreground mb-4">الطلبات والإيرادات (آخر 7 أيام)</h2>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={ordersData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
@@ -91,15 +91,15 @@ export default function AdminAnalyticsPage() {
                   }}
                 />
                 <Legend />
-                <Line type="monotone" dataKey="orders" stroke="#C1272D" strokeWidth={2} name="Orders" />
-                <Line type="monotone" dataKey="revenue" stroke="#C9E100" strokeWidth={2} name="Revenue" />
+                <Line type="monotone" dataKey="orders" stroke="#C1272D" strokeWidth={2} name="الطلبات" />
+                <Line type="monotone" dataKey="revenue" stroke="#C9E100" strokeWidth={2} name="الإيرادات" />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
           {revenueByStatus.length > 0 && (
             <div className="bg-card border border-border p-5 rounded-sm">
-              <h2 className="text-lg font-black text-foreground mb-4">Revenue by Order Status</h2>
+              <h2 className="text-lg font-black text-foreground mb-4">الإيرادات حسب حالة الطلب</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -125,9 +125,9 @@ export default function AdminAnalyticsPage() {
 
         {/* Top Products */}
         <div className="bg-card border border-border p-5 rounded-sm">
-          <h2 className="text-lg font-black text-foreground mb-4">Top Products by Stock</h2>
+          <h2 className="text-lg font-black text-foreground mb-4">أفضل المنتجات حسب المخزون</h2>
           {topProducts.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8 text-sm">No products yet</p>
+            <p className="text-muted-foreground text-center py-8 text-sm">لا توجد منتجات بعد</p>
           ) : (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={topProducts}>
@@ -141,8 +141,8 @@ export default function AdminAnalyticsPage() {
                   }}
                 />
                 <Legend />
-                <Bar dataKey="stock" fill="#C1272D" name="Stock" />
-                <Bar dataKey="price" fill="#C9E100" name="Price" />
+                <Bar dataKey="stock" fill="#C1272D" name="المخزون" />
+                <Bar dataKey="price" fill="#C9E100" name="السعر" />
               </BarChart>
             </ResponsiveContainer>
           )}

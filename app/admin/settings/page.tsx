@@ -45,10 +45,10 @@ export default function AdminSettingsPage() {
     reader.onload = (event) => {
       const content = event.target?.result as string;
       if (restore(content)) {
-        setRestoreMessage('Data restored successfully!');
+        setRestoreMessage('تمت استعادة البيانات بنجاح!');
         setPasswordError(false);
       } else {
-        setRestoreMessage('Failed to restore — invalid backup file.');
+        setRestoreMessage('فشلت الاستعادة — ملف النسخ الاحتياطي غير صالح.');
         setPasswordError(true);
       }
       setTimeout(() => setRestoreMessage(''), 4000);
@@ -60,29 +60,29 @@ export default function AdminSettingsPage() {
     e.preventDefault();
     setPasswordMessage('');
     if (newPassword !== confirmPassword) {
-      setPasswordMessage('New passwords do not match');
+      setPasswordMessage('كلمة المرور الجديدة غير متطابقة');
       setPasswordError(true);
       return;
     }
     const result = await changePassword(currentPassword, newPassword);
     if (result.ok) {
-      setPasswordMessage('Password updated successfully');
+      setPasswordMessage('تم تحديث كلمة المرور بنجاح');
       setPasswordError(false);
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setUsingDefault(false);
     } else {
-      setPasswordMessage(result.error || 'Failed to update password');
+      setPasswordMessage(result.error || 'فشل تحديث كلمة المرور');
       setPasswordError(true);
     }
   };
 
   return (
-    <AdminPageShell title="Settings" subtitle="Store info, security, and backups.">
+    <AdminPageShell title="الإعدادات" subtitle="معلومات المتجر، الأمان، والنسخ الاحتياطي.">
       {usingDefault && (
         <div className="mb-6 p-4 bg-primary/10 border border-primary/30 rounded-sm text-sm font-semibold">
-          You&apos;re still using the default starter password. Change it below.
+          لا تزال تستخدم كلمة المرور الافتراضية. قم بتغييرها أدناه.
         </div>
       )}
 
@@ -90,12 +90,12 @@ export default function AdminSettingsPage() {
         <section className="bg-card border border-border rounded-sm p-5">
           <h2 className="font-black flex items-center gap-2 mb-4">
             <Globe className="w-5 h-5 text-primary" />
-            Store Information
+            معلومات المتجر
           </h2>
           <div className="space-y-4">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground mb-1">
-                Store Name
+                اسم المتجر
               </label>
               <input
                 type="text"
@@ -106,22 +106,22 @@ export default function AdminSettingsPage() {
             </div>
             <div>
               <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground mb-1">
-                Currency
+                العملة
               </label>
               <input
                 type="text"
-                defaultValue="DZD (Algerian Dinar)"
+                defaultValue="د.ج (دينار جزائري)"
                 readOnly
                 className="w-full px-4 py-2 border border-border rounded-sm bg-muted/50"
               />
             </div>
             <div>
               <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground mb-1">
-                Payment
+                الدفع
               </label>
               <input
                 type="text"
-                defaultValue="Cash on Delivery (COD)"
+                defaultValue="الدفع عند الاستلام (COD)"
                 readOnly
                 className="w-full px-4 py-2 border border-border rounded-sm bg-muted/50"
               />
@@ -132,17 +132,17 @@ export default function AdminSettingsPage() {
         <section className="bg-card border border-border rounded-sm p-5">
           <h2 className="font-black flex items-center gap-2 mb-4">
             <Lock className="w-5 h-5 text-primary" />
-            Change Password
+            تغيير كلمة المرور
           </h2>
           <form onSubmit={handlePasswordChange} className="space-y-4">
             {(['currentPassword', 'newPassword', 'confirmPassword'] as const).map((field) => (
               <div key={field}>
                 <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground mb-1">
                   {field === 'currentPassword'
-                    ? 'Current Password'
+                    ? 'كلمة المرور الحالية'
                     : field === 'newPassword'
-                      ? 'New Password'
-                      : 'Confirm New Password'}
+                      ? 'كلمة المرور الجديدة'
+                      : 'تأكيد كلمة المرور الجديدة'}
                 </label>
                 <div className="relative">
                   <input
@@ -185,22 +185,21 @@ export default function AdminSettingsPage() {
               type="submit"
               className="w-full bg-primary text-primary-foreground py-2.5 font-bold rounded-sm hover:bg-redDim transition-colors"
             >
-              Update Password
+              تحديث كلمة المرور
             </button>
           </form>
           <p className="text-xs text-muted-foreground mt-4">
-            Password is stored as a hash in your browser — never as plain text. Client-side
-            auth is suitable for a single-owner demo store, not high-security environments.
+            يتم تخزين كلمة المرور بشكل مشفر في متصفحك — وليس كنص عادي. المصادقة من جانب العميل مناسبة لمتجر تجريبي بمالك واحد، وليس للبيئات عالية الأمان.
           </p>
         </section>
 
         <section className="bg-card border border-border rounded-sm p-5">
           <h2 className="font-black flex items-center gap-2 mb-4">
             <Download className="w-5 h-5 text-primary" />
-            Backup & Restore
+            النسخ الاحتياطي والاستعادة
           </h2>
           <p className="text-sm text-muted-foreground mb-4">
-            Export all products and orders as JSON. Restore replaces current data.
+            تصدير جميع المنتجات والطلبات بصيغة JSON. الاستعادة تحل محل البيانات الحالية.
           </p>
           <div className="space-y-3">
             <motion.button
@@ -210,16 +209,16 @@ export default function AdminSettingsPage() {
               className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground py-2.5 font-bold rounded-sm"
             >
               <Download className="w-4 h-4" />
-              Download Full Backup
+              تحميل نسخة احتياطية كاملة
             </motion.button>
             <label className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-border py-2.5 font-bold rounded-sm hover:border-primary cursor-pointer text-sm">
               <Upload className="w-4 h-4" />
-              Restore from Backup
+              استعادة من نسخة احتياطية
               <input type="file" accept=".json" onChange={handleRestore} className="hidden" />
             </label>
             {restoreMessage && (
               <p
-                className={`text-sm font-semibold text-center ${restoreMessage.includes('success') ? 'text-venom' : 'text-destructive'}`}
+                className={`text-sm font-semibold text-center ${restoreMessage.includes('نجاح') ? 'text-venom' : 'text-destructive'}`}
               >
                 {restoreMessage}
               </p>

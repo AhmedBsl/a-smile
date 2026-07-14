@@ -18,8 +18,8 @@ export default function CategoriesPage() {
 
   return (
     <AdminPageShell
-      title="Categories"
-      subtitle="Manage product collections shown in the shop filter bar."
+      title="التصنيفات"
+      subtitle="إدارة مجموعات المنتجات المعروضة في شريط تصفية المتجر."
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {categories.map((cat, index) => (
@@ -39,15 +39,14 @@ export default function CategoriesPage() {
                 /{cat.slug}
               </p>
               <p className="text-xs text-muted-foreground mt-3">
-                {cat.count} product{cat.count !== 1 ? 's' : ''}
+                {cat.count} {cat.count !== 1 ? 'منتجات' : 'منتج'}
               </p>
             </div>
           </motion.div>
         ))}
       </div>
       <p className="text-sm text-muted-foreground mt-8 p-4 bg-muted/50 rounded-sm border border-border">
-        Collections are seeded with the Melina Chic brand lineup. Assign products to a collection
-        when editing them in Products.
+        التصنيفات مأخوذة من تشكيلة ماركة Melina Chic. يمكنك تعيين المنتجات لتصنيف عند تعديلها في صفحة المنتجات.
       </p>
     </AdminPageShell>
   );

@@ -80,7 +80,6 @@ const navSections: { title?: string; items: NavItem[] }[] = [
           { label: 'التقييمات', href: '/admin/marketing?tab=reviews' },
         ],
       },
-      { icon: FileText, label: 'المحتوى', href: '/admin/content' },
       { icon: Users, label: 'العملاء', href: '/admin/customers' },
       { icon: BarChart3, label: 'الإحصائيات', href: '/admin/analytics' },
     ],
@@ -97,7 +96,7 @@ export function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [expanded, setExpanded] = useState<string[]>(['Orders', 'Products']);
+  const [expanded, setExpanded] = useState<string[]>(['الطلبات', 'المنتجات']);
   const orders = useStore((s) => s.orders);
   const products = useStore((s) => s.products);
 
@@ -133,7 +132,7 @@ export function AdminSidebar() {
       ? isActive(item.href)
       : item.children?.some((c) => isActive(c.href));
 
-    if (item.label === 'View Store') {
+    if (item.icon === ExternalLink) {
       return (
         <Link
           key={item.label}
@@ -162,12 +161,12 @@ export function AdminSidebar() {
           >
             <Icon className="w-4 h-4 shrink-0" />
             <span className="flex-1 text-left">{item.label}</span>
-            {item.label === 'Orders' && newOrders > 0 && (
+            {item.label === 'الطلبات' && newOrders > 0 && (
               <span className="text-[10px] font-mono bg-primary text-white px-1.5 py-0.5 rounded-sm min-w-[18px] text-center">
                 {newOrders}
               </span>
             )}
-            {item.label === 'Products' && lowStock > 0 && (
+            {item.label === 'المنتجات' && lowStock > 0 && (
               <span className="text-[10px] font-mono bg-venom/20 text-venom px-1.5 py-0.5 rounded-sm min-w-[18px] text-center">
                 {lowStock}
               </span>
@@ -235,7 +234,7 @@ export function AdminSidebar() {
           onClick={() => setIsOpen(!isOpen)}
           className="p-2.5 bg-charcoal2 border border-white/10 rounded-sm shadow-lg"
           whileTap={{ scale: 0.95 }}
-          aria-label="Toggle menu"
+          aria-label="فتح/إغلاق القائمة"
         >
           {isOpen ? <X className="w-5 h-5 text-sand" /> : <Menu className="w-5 h-5 text-sand" />}
         </motion.button>

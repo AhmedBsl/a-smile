@@ -24,16 +24,16 @@ export default function InventoryPage() {
 
   return (
     <AdminPageShell
-      title="Inventory"
-      subtitle="Manage your product stock levels"
+      title="المخزون"
+      subtitle="إدارة مستويات مخزون منتجاتك"
     >
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         {[
-          { label: 'Total Items', value: totalItems.toString(), icon: Package, iconColor: 'text-primary/20' },
-          { label: 'Inventory Value', value: formatDZD(totalValue), icon: BarChart3, iconColor: 'text-accent/20' },
-          { label: 'Low Stock', value: lowStockProducts.length.toString(), icon: AlertTriangle, iconColor: 'text-yellow-500/20', valueColor: 'text-yellow-600' },
-          { label: 'Out of Stock', value: outOfStockProducts.length.toString(), icon: TrendingDown, iconColor: 'text-primary/20', valueColor: 'text-primary' },
+          { label: 'إجمالي العناصر', value: totalItems.toString(), icon: Package, iconColor: 'text-primary/20' },
+          { label: 'قيمة المخزون', value: formatDZD(totalValue), icon: BarChart3, iconColor: 'text-accent/20' },
+          { label: 'مخزون منخفض', value: lowStockProducts.length.toString(), icon: AlertTriangle, iconColor: 'text-yellow-500/20', valueColor: 'text-yellow-600' },
+          { label: 'نفذ من المخزون', value: outOfStockProducts.length.toString(), icon: TrendingDown, iconColor: 'text-primary/20', valueColor: 'text-primary' },
         ].map((kpi, index) => {
           const Icon = kpi.icon;
           return (
@@ -58,17 +58,17 @@ export default function InventoryPage() {
 
       {/* Sort Controls */}
       <div className="mb-6 flex gap-2">
-        {(['stock', 'price', 'name'] as const).map((option) => (
-          <button
-            key={option}
-            onClick={() => setSortBy(option)}
-            className={`px-4 py-2 rounded-sm font-semibold capitalize transition-all text-sm ${
-              sortBy === option
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-muted text-foreground hover:bg-muted-foreground/20'
-            }`}
-          >
-            {option}
+          {(['stock', 'price', 'name'] as const).map((option) => (
+            <button
+              key={option}
+              onClick={() => setSortBy(option)}
+              className={`px-4 py-2 rounded-sm font-semibold capitalize transition-all text-sm ${
+                sortBy === option
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-foreground hover:bg-muted-foreground/20'
+              }`}
+            >
+              {option === 'stock' ? 'المخزون' : option === 'price' ? 'السعر' : 'الاسم'}
           </button>
         ))}
       </div>
@@ -79,12 +79,12 @@ export default function InventoryPage() {
           <table className="w-full text-sm">
             <thead className="bg-muted border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 font-bold text-foreground">Product</th>
+                <th className="text-left px-4 py-3 font-bold text-foreground">المنتج</th>
                 <th className="text-left px-4 py-3 font-bold text-foreground">SKU</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground">Stock</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground">Price</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground">Total Value</th>
-                <th className="text-left px-4 py-3 font-bold text-foreground">Status</th>
+                <th className="text-left px-4 py-3 font-bold text-foreground">المخزون</th>
+                <th className="text-left px-4 py-3 font-bold text-foreground">السعر</th>
+                <th className="text-left px-4 py-3 font-bold text-foreground">القيمة الإجمالية</th>
+                <th className="text-left px-4 py-3 font-bold text-foreground">الحالة</th>
               </tr>
             </thead>
             <tbody>
@@ -105,11 +105,11 @@ export default function InventoryPage() {
                   <td className="px-4 py-3 font-semibold font-mono">{formatDZD(product.price * product.stock)}</td>
                   <td className="px-4 py-4">
                     {product.stock === 0 ? (
-                      <span className="px-3 py-1 bg-primary/20 text-primary rounded-sm text-xs font-bold">Out of Stock</span>
+                      <span className="px-3 py-1 bg-primary/20 text-primary rounded-sm text-xs font-bold">نفذ من المخزون</span>
                     ) : product.stock < 10 ? (
-                      <span className="px-3 py-1 bg-yellow-500/20 text-yellow-700 rounded-sm text-xs font-bold">Low Stock</span>
+                      <span className="px-3 py-1 bg-yellow-500/20 text-yellow-700 rounded-sm text-xs font-bold">مخزون منخفض</span>
                     ) : (
-                      <span className="px-3 py-1 bg-venom/20 text-charcoal rounded-sm text-xs font-bold">In Stock</span>
+                      <span className="px-3 py-1 bg-venom/20 text-charcoal rounded-sm text-xs font-bold">متوفر</span>
                     )}
                   </td>
                 </motion.tr>
